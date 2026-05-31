@@ -5,1174 +5,992 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mi Plan Fit">
+<meta name="apple-mobile-web-app-title" content="Plan Fit">
 <meta name="theme-color" content="#1a3a2e">
-<title>Mi Plan Fit</title>
+<title>Plan Fit</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #1D9E75;
-  --green-dark: #0F6E56;
-  --green-deep: #1a3a2e;
-  --green-light: #E1F5EE;
-  --green-mid: #A8DFC8;
-  --amber: #EF9F27;
-  --amber-light: #FAEEDA;
-  --red-light: #FAECE7;
-  --red: #E05C3A;
-  --blue-light: #E6F1FB;
-  --bg: #f4f7f5;
-  --card: #ffffff;
-  --text: #1a2e26;
-  --text2: #4a6358;
-  --text3: #8aaa98;
-  --border: #ddeee6;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 2px 16px rgba(15,110,86,0.08);
-  --shadow-md: 0 4px 24px rgba(15,110,86,0.14);
+  --green:#1D9E75;--green-dark:#0F6E56;--green-deep:#1a3a2e;--green-light:#E1F5EE;--green-mid:#A8DFC8;
+  --blue:#2563EB;--blue-dark:#1e40af;--blue-deep:#1e3a5f;--blue-light:#DBEAFE;--blue-mid:#93c5fd;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--red-light:#FEE2E2;--red:#DC2626;
+  --bg:#f4f7f5;--card:#fff;--text:#1a2e26;--text2:#4a6358;--text3:#8aaa98;--border:#ddeee6;
+  --radius:16px;--radius-sm:10px;--shadow:0 2px 16px rgba(15,110,86,0.08);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  max-width: 430px;
-  margin: 0 auto;
-  position: relative;
-}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;max-width:430px;margin:0 auto;}
+
+/* SPLASH HOME */
+.home-splash{position:fixed;inset:0;background:var(--green-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease;}
+.home-splash.hide{opacity:0;pointer-events:none;}
+.hs-logo{font-family:'DM Serif Display',serif;font-size:38px;color:#fff;margin-bottom:6px;}
+.hs-logo span{color:var(--green-mid);font-style:italic;}
+.hs-sub{font-size:13px;color:var(--green-mid);opacity:0.7;margin-bottom:48px;letter-spacing:0.08em;text-transform:uppercase;}
+.hs-cards{display:flex;flex-direction:column;gap:14px;width:100%;padding:0 32px;}
+.hs-card{border-radius:20px;padding:22px 24px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;}
+.hs-card:active{transform:scale(0.97);}
+.hs-card.laura{background:linear-gradient(135deg,#1D9E75 0%,#0F6E56 100%);}
+.hs-card.manolo{background:linear-gradient(135deg,#2563EB 0%,#1e40af 100%);}
+.hs-card-tag{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;opacity:0.75;color:#fff;margin-bottom:4px;}
+.hs-card-name{font-family:'DM Serif Display',serif;font-size:32px;color:#fff;margin-bottom:2px;}
+.hs-card-desc{font-size:13px;color:rgba(255,255,255,0.7);}
+.hs-card-arrow{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:24px;color:rgba(255,255,255,0.4);}
+.hs-card-emoji{position:absolute;right:16px;bottom:10px;font-size:48px;opacity:0.15;}
+
+/* APP WRAPPER */
+.app-wrapper{display:none;flex-direction:column;height:100%;}
+.app-wrapper.active{display:flex;}
 
 /* HEADER */
-.header {
-  background: var(--green-deep);
-  padding: env(safe-area-inset-top, 12px) 20px 16px;
-  padding-top: max(env(safe-area-inset-top), 12px);
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-.header::before {
-  content: '';
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(29,158,117,0.3) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.header-greeting { font-size: 12px; color: var(--green-mid); font-weight: 400; }
-.header-day { font-size: 11px; color: var(--green-mid); opacity: 0.7; }
-.header-title { font-family: 'DM Serif Display', serif; font-size: 26px; color: #fff; line-height: 1.1; }
-.header-title span { color: var(--green-mid); font-style: italic; }
+.header{padding:max(env(safe-area-inset-top),12px) 20px 16px;flex-shrink:0;position:relative;overflow:hidden;}
+.header.green{background:var(--green-deep);}
+.header.blue{background:var(--blue-deep);}
+.header::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);border-radius:50%;}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.header-greeting{font-size:12px;font-weight:400;}
+.header.green .header-greeting{color:var(--green-mid);}
+.header.blue .header-greeting{color:var(--blue-mid);}
+.header-back{font-size:12px;cursor:pointer;padding:4px 10px;border-radius:20px;border:none;font-family:'DM Sans',sans-serif;}
+.header.green .header-back{background:rgba(29,158,117,0.2);color:var(--green-mid);}
+.header.blue .header-back{background:rgba(37,99,235,0.2);color:var(--blue-mid);}
+.header-title{font-family:'DM Serif Display',serif;font-size:26px;color:#fff;line-height:1.1;}
+.header-title span{font-style:italic;}
+.header.green .header-title span{color:var(--green-mid);}
+.header.blue .header-title span{color:var(--blue-mid);}
 
 /* NAV */
-.nav {
-  display: flex;
-  background: var(--green-deep);
-  padding: 0 8px 12px;
-  gap: 4px;
-  flex-shrink: 0;
-}
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 8px 4px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.5);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'DM Sans', sans-serif;
-}
-.nav-btn.active {
-  background: rgba(29,158,117,0.25);
-  color: var(--green-mid);
-}
-.nav-icon { font-size: 18px; line-height: 1; }
-.nav-label { font-size: 10px; font-weight: 500; }
+.nav{display:flex;padding:0 8px 12px;gap:4px;flex-shrink:0;}
+.nav.green{background:var(--green-deep);}
+.nav.blue{background:var(--blue-deep);}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:var(--radius-sm);border:none;background:transparent;color:rgba(255,255,255,0.4);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.nav.green .nav-btn.active{background:rgba(29,158,117,0.25);color:var(--green-mid);}
+.nav.blue .nav-btn.active{background:rgba(37,99,235,0.25);color:var(--blue-mid);}
+.nav-icon{font-size:18px;line-height:1;}
+.nav-label{font-size:10px;font-weight:500;}
 
 /* MAIN */
-.main {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 16px 16px 100px;
-}
-.main::-webkit-scrollbar { display: none; }
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
+.main::-webkit-scrollbar{display:none;}
+.screen{display:none;animation:fadeIn 0.25s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* SCREENS */
-.screen { display: none; animation: fadeIn 0.25s ease; }
-.screen.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-/* SECTION TITLE */
-.section-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.section-sub { font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.5; }
-
-/* STAT GRID */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.stat-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 14px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-}
-.stat-card.green { background: var(--green-deep); border-color: var(--green-deep); }
-.stat-card.green .stat-label { color: var(--green-mid); }
-.stat-card.green .stat-val { color: #fff; }
-.stat-card.green .stat-sub { color: rgba(168,223,200,0.6); }
-.stat-label { font-size: 11px; color: var(--text3); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
-.stat-val { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
-.stat-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-/* INFO BOX */
-.info-box {
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  margin-bottom: 12px;
-  font-size: 13px;
-  line-height: 1.6;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.info-box.green { background: var(--green-light); color: var(--green-dark); border: 1px solid #b8e8d4; }
-.info-box.amber { background: var(--amber-light); color: #7a4f0a; border: 1px solid #f0d494; }
-.info-box.blue { background: var(--blue-light); color: #1a4a8a; border: 1px solid #b8d4f4; }
-.info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-/* DAY PILLS */
-.day-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
-.day-pills::-webkit-scrollbar { display: none; }
-.day-pill {
-  flex-shrink: 0;
-  padding: 7px 14px;
-  border-radius: 20px;
-  border: 1.5px solid var(--border);
-  background: var(--card);
-  color: var(--text2);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-  font-family: 'DM Sans', sans-serif;
-}
-.day-pill.active {
-  background: var(--green);
-  border-color: var(--green);
-  color: #fff;
-}
-
-/* WORKOUT CARD */
-.workout-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-}
-.workout-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.workout-title { font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.3; }
-.workout-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
-.time-bar-wrap { margin-bottom: 14px; }
-.time-bar { display: flex; border-radius: 8px; overflow: hidden; height: 24px; }
-.time-seg { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
-.ts-warm { background: #E6F1FB; color: #185FA5; flex: 5; }
-.ts-work { background: var(--green-light); color: var(--green-dark); }
-.ts-cardio { background: #EEEDFE; color: #3C3489; }
-.ts-ab { background: var(--amber-light); color: #7a4f0a; }
-.exercise-list { display: flex; flex-direction: column; gap: 1px; }
-.ex-row {
-  display: flex;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  gap: 10px;
-}
-.ex-row:last-child { border-bottom: none; }
-.ex-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.ex-dot.green { background: var(--green); }
-.ex-dot.amber { background: var(--amber); }
-.ex-dot.blue { background: #5B8DEF; }
-.ex-name { font-size: 13px; color: var(--text); flex: 1; line-height: 1.3; }
-.ex-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 6px; flex-shrink: 0; }
-.ex-tag.multi { background: #EEEDFE; color: #3C3489; }
-.ex-tag.liga { background: var(--amber-light); color: #7a4f0a; }
-.ex-tag.cardio { background: var(--blue-light); color: #185FA5; }
-.ex-tag.ab { background: var(--amber-light); color: #7a4f0a; border: 1px solid #f0d494; }
-.ex-tag.new { background: var(--green-light); color: var(--green-dark); border: 1px solid #b8e8d4; }
-.ex-meta { font-size: 11px; color: var(--text3); flex-shrink: 0; text-align: right; }
-.rest-card {
-  background: var(--green-deep);
-  border-radius: var(--radius);
-  padding: 24px 20px;
-  text-align: center;
-  color: #fff;
-  margin-bottom: 12px;
-}
-.rest-emoji { font-size: 36px; margin-bottom: 8px; }
-.rest-title { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 6px; }
-.rest-sub { font-size: 13px; color: var(--green-mid); }
-
-/* CATEGORY TITLE */
-.cat-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 18px 0 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.cat-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-/* MEAL CARDS */
-.meal-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-}
-.meal-header-bar {
-  background: var(--green);
-  padding: 10px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.meal-header-title { font-size: 14px; font-weight: 600; color: #fff; }
-.meal-time-pill { font-size: 11px; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.18); padding: 3px 8px; border-radius: 10px; }
-.meal-body { padding: 12px 14px; }
-.meal-items { font-size: 13px; color: var(--text2); line-height: 1.8; }
-.meal-items span { display: flex; gap: 6px; align-items: baseline; }
-.meal-items span::before { content: "·"; color: var(--green); font-weight: 700; flex-shrink: 0; }
-.meal-footer { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 14px 12px; background: #f9fcfa; border-top: 1px solid var(--border); }
-.mpill { font-size: 10px; padding: 3px 8px; border-radius: 8px; font-weight: 500; }
-.mp-kcal { background: var(--amber-light); color: #7a4f0a; }
-.mp-prot { background: var(--green-light); color: var(--green-dark); }
-.mp-time { background: #f1f1f1; color: #555; }
-
-/* COMBO SECTION */
-.combo-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  margin-bottom: 12px;
-}
-.combo-label { font-size: 12px; font-weight: 600; color: var(--green-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-.combo-select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  font-family: 'DM Sans', sans-serif;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231D9E75' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 32px;
-  margin-bottom: 12px;
-}
-.combo-result-bar {
-  background: var(--green-deep);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  display: flex;
-  justify-content: space-around;
-  margin: 12px 0 10px;
-}
-.cr-item { text-align: center; }
-.cr-label { font-size: 10px; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
-.cr-val { font-size: 20px; font-weight: 700; color: #fff; }
-.cr-sub { font-size: 10px; color: rgba(168,223,200,0.6); }
-.alert { border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; line-height: 1.5; margin-top: 8px; display: none; }
-.alert.show { display: block; }
-.alert-ok { background: var(--green-light); color: var(--green-dark); border: 1px solid #b8e8d4; }
-.alert-warn { background: var(--amber-light); color: #7a4f0a; border: 1px solid #f0d494; }
-.alert-danger { background: var(--red-light); color: #7a1f0a; border: 1px solid #f0c4b4; }
-
-/* SHOPPING LIST */
-.shop-group { margin-bottom: 16px; }
-.shop-group-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--green-dark);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.shop-items-wrap {
-  background: var(--card);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-}
-.shop-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background 0.1s;
-}
-.shop-item:last-child { border-bottom: none; }
-.shop-item:active { background: var(--bg); }
-.shop-checkbox {
-  width: 20px; height: 20px;
-  border-radius: 6px;
-  border: 2px solid var(--border);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-.shop-item.checked .shop-checkbox { background: var(--green); border-color: var(--green); }
-.shop-item.checked .shop-checkbox::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
-.shop-item.checked .shop-name { color: var(--text3); text-decoration: line-through; }
-.shop-name { font-size: 13px; color: var(--text); flex: 1; }
-
-/* HORARIO */
-.horario-item {
-  display: flex;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  align-items: flex-start;
-}
-.horario-item:last-child { border-bottom: none; }
-.horario-time-col { text-align: right; width: 70px; flex-shrink: 0; }
-.horario-time { font-size: 12px; font-weight: 700; color: var(--green); }
-.horario-line { width: 2px; background: var(--border); flex-shrink: 0; margin-top: 6px; }
-.horario-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 4px; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--green); }
-.horario-content { flex: 1; }
-.horario-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-.horario-detail { font-size: 12px; color: var(--text2); line-height: 1.5; }
-
-/* CONSEJOS */
-.consejo-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 14px;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-.consejo-num {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.consejo-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.consejo-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
+/* CARDS & STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.stat-card.accent-green{background:var(--green-deep);border-color:var(--green-deep);}
+.stat-card.accent-green .stat-label{color:var(--green-mid);}
+.stat-card.accent-green .stat-val{color:#fff;}
+.stat-card.accent-green .stat-sub{color:rgba(168,223,200,0.6);}
+.stat-card.accent-blue{background:var(--blue-deep);border-color:var(--blue-deep);}
+.stat-card.accent-blue .stat-label{color:var(--blue-mid);}
+.stat-card.accent-blue .stat-val{color:#fff;}
+.stat-card.accent-blue .stat-sub{color:rgba(147,197,253,0.6);}
+.stat-label{font-size:11px;color:var(--text3);margin-bottom:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;}
+.stat-val{font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:3px;}
 
 /* PROGRESS BANNER */
-.progress-banner {
-  background: linear-gradient(135deg, var(--green-deep) 0%, #0d5c45 100%);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.progress-banner::after {
-  content: '';
-  position: absolute;
-  bottom: -20px; right: -20px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: rgba(29,158,117,0.3);
-}
-.pb-label { font-size: 11px; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-.pb-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; margin-bottom: 12px; }
-.pb-bars { display: flex; flex-direction: column; gap: 8px; }
-.pb-row { display: flex; align-items: center; gap: 10px; }
-.pb-name { font-size: 11px; color: var(--green-mid); width: 60px; flex-shrink: 0; }
-.pb-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
-.pb-bar-fill { height: 100%; border-radius: 3px; background: var(--green-mid); }
-.pb-pct { font-size: 11px; color: rgba(255,255,255,0.7); width: 30px; text-align: right; flex-shrink: 0; }
+.progress-banner{border-radius:var(--radius);padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
+.progress-banner.green{background:linear-gradient(135deg,var(--green-deep) 0%,#0d5c45 100%);}
+.progress-banner.blue{background:linear-gradient(135deg,var(--blue-deep) 0%,#1e3a8a 100%);}
+.pb-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+.progress-banner.green .pb-label{color:var(--green-mid);}
+.progress-banner.blue .pb-label{color:var(--blue-mid);}
+.pb-title{font-family:'DM Serif Display',serif;font-size:20px;color:#fff;margin-bottom:12px;}
+.pb-bars{display:flex;flex-direction:column;gap:8px;}
+.pb-row{display:flex;align-items:center;gap:10px;}
+.pb-name{font-size:11px;width:65px;flex-shrink:0;}
+.progress-banner.green .pb-name{color:var(--green-mid);}
+.progress-banner.blue .pb-name{color:var(--blue-mid);}
+.pb-bar-bg{flex:1;height:6px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+.pb-bar-fill{height:100%;border-radius:3px;}
+.pb-pct{font-size:11px;color:rgba(255,255,255,0.7);width:35px;text-align:right;flex-shrink:0;}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.12);}
+.meta-box{background:rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;}
+.meta-box-label{font-size:10px;opacity:0.7;margin-bottom:2px;}
+.progress-banner.green .meta-box-label{color:var(--green-mid);}
+.progress-banner.blue .meta-box-label{color:var(--blue-mid);}
+.meta-box-val{font-size:20px;font-weight:700;color:#fff;}
+.meta-box-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.meta-note{font-size:11px;color:rgba(255,255,255,0.5);text-align:center;margin-top:8px;}
 
-/* BOTTOM NAV SAFE AREA */
-.bottom-safe { height: env(safe-area-inset-bottom, 0); background: var(--green-deep); flex-shrink: 0; }
+/* INFO BOXES */
+.info-box{border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.6;display:flex;gap:10px;align-items:flex-start;}
+.info-box.green{background:var(--green-light);color:var(--green-dark);border:1px solid #b8e8d4;}
+.info-box.blue{background:var(--blue-light);color:var(--blue-dark);border:1px solid #bcd4f8;}
+.info-box.amber{background:var(--amber-light);color:#7a4f0a;border:1px solid #f0d494;}
+.info-box.red{background:var(--red-light);color:#7F1D1D;border:1px solid #f4b8b8;}
+.info-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 
-/* SPLASH SCREEN */
-.splash {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--green-deep);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  overflow: hidden;
-}
-.splash.hide {
-  opacity: 0;
-  transform: scale(1.05);
-  pointer-events: none;
-}
-.splash-bg-circle1 {
-  position: absolute;
-  width: 300px; height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(29,158,117,0.25) 0%, transparent 70%);
-  top: -80px; right: -80px;
-}
-.splash-bg-circle2 {
-  position: absolute;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(29,158,117,0.2) 0%, transparent 70%);
-  bottom: -40px; left: -40px;
-}
-.splash-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  z-index: 1;
-  text-align: center;
-  padding: 0 40px;
-}
-.splash-icon {
-  width: 90px; height: 90px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 44px;
-  margin-bottom: 28px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.splash-hola {
-  font-size: 16px;
-  color: var(--green-mid);
-  font-weight: 400;
-  margin-bottom: 6px;
-  letter-spacing: 0.05em;
-}
-.splash-name {
-  font-family: 'DM Serif Display', serif;
-  font-size: 52px;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.splash-plan {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
-  color: var(--green-mid);
-  font-style: italic;
-  margin-bottom: 40px;
-}
-.splash-divider {
-  width: 40px;
-  height: 2px;
-  background: rgba(168,223,200,0.3);
-  border-radius: 2px;
-  margin-bottom: 40px;
-}
-.splash-btn {
-  background: var(--green);
-  color: #fff;
-  border: none;
-  border-radius: 16px;
-  padding: 16px 48px;
-  font-size: 17px;
-  font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(29,158,117,0.4);
-  transition: transform 0.15s, box-shadow 0.15s;
-  letter-spacing: 0.01em;
-}
-.splash-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 10px rgba(29,158,117,0.3);
-}
-.splash-sub {
-  font-size: 13px;
-  color: rgba(168,223,200,0.5);
-  margin-top: 16px;
-}
-.splash-dots {
-  display: flex;
-  gap: 6px;
-  margin-top: 50px;
-}
-.splash-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(168,223,200,0.25);
-}
-.splash-dot.active {
-  background: var(--green-mid);
-  width: 18px;
-  border-radius: 3px;
-}
+/* SECTION TITLE */
+.section-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:4px;}
+.section-sub{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5;}
 
+/* DAY PILLS */
+.day-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none;}
+.day-pills::-webkit-scrollbar{display:none;}
+.day-pill{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.day-pill.green.active{background:var(--green);border-color:var(--green);color:#fff;}
+.day-pill.blue.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* WORKOUT CARD */
+.workout-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.workout-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.workout-title{font-size:16px;font-weight:600;color:var(--text);line-height:1.3;}
+.workout-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.time-bar{display:flex;border-radius:8px;overflow:hidden;height:22px;margin-bottom:12px;gap:2px;}
+.ts{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border-radius:4px;}
+.ts-warm{background:#E6F1FB;color:#185FA5;}
+.ts-work{background:var(--green-light);color:var(--green-dark);}
+.ts-work-blue{background:var(--blue-light);color:var(--blue-dark);}
+.ts-cardio{background:#EEEDFE;color:#3C3489;}
+.ts-ab{background:var(--amber-light);color:#7a4f0a;}
+
+/* EXERCISE ROWS */
+.ex-list{display:flex;flex-direction:column;}
+.ex-item{border-bottom:1px solid var(--border);}
+.ex-item:last-child{border-bottom:none;}
+.ex-row{display:flex;align-items:center;padding:9px 0;gap:10px;cursor:pointer;}
+.ex-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ex-dot.green{background:var(--green);}
+.ex-dot.blue{background:var(--blue);}
+.ex-dot.amber{background:var(--amber);}
+.ex-dot.purple{background:#7C3AED;}
+.ex-name{font-size:13px;color:var(--text);flex:1;line-height:1.3;}
+.ex-meta{font-size:11px;color:var(--text3);flex-shrink:0;text-align:right;}
+.ex-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px;flex-shrink:0;}
+.ex-tag.multi{background:#EEEDFE;color:#3C3489;}
+.ex-tag.super{background:var(--green-light);color:var(--green-dark);}
+.ex-tag.super-blue{background:var(--blue-light);color:var(--blue-dark);}
+.ex-tag.cardio{background:#E6F1FB;color:#185FA5;}
+.ex-tag.ab{background:var(--amber-light);color:#7a4f0a;}
+.ex-tag.manc{background:#FCE7F3;color:#831843;}
+.ex-expand{display:none;padding:0 0 12px 18px;animation:fadeIn 0.2s ease;}
+.ex-expand.open{display:block;}
+.ex-img-wrap{background:var(--bg);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;text-align:center;}
+.ex-img{font-size:56px;margin-bottom:6px;}
+.ex-img-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.ex-img-desc{font-size:12px;color:var(--text2);line-height:1.6;}
+.ex-tips{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:8px;padding:8px 10px;line-height:1.6;}
+.ex-tips-blue{font-size:12px;color:var(--blue-dark);background:var(--blue-light);border-radius:8px;padding:8px 10px;line-height:1.6;}
+.ex-chevron{font-size:12px;color:var(--text3);flex-shrink:0;transition:transform 0.2s;}
+.ex-chevron.open{transform:rotate(180deg);}
+
+/* REST CARD */
+.rest-card{background:linear-gradient(135deg,var(--green-deep),#0d5c45);border-radius:var(--radius);padding:24px 20px;text-align:center;color:#fff;margin-bottom:12px;}
+.rest-card.blue{background:linear-gradient(135deg,var(--blue-deep),#1e3a8a);}
+.rest-emoji{font-size:36px;margin-bottom:8px;}
+.rest-title{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:6px;}
+.rest-sub{font-size:13px;opacity:0.7;}
+
+/* MEAL CARDS */
+.meal-card{background:var(--card);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.meal-hdr{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.meal-hdr.green{background:var(--green);}
+.meal-hdr.blue{background:var(--blue);}
+.meal-hdr-title{font-size:14px;font-weight:600;color:#fff;}
+.meal-time-pill{font-size:11px;color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.18);padding:3px 8px;border-radius:10px;}
+.meal-body{padding:12px 14px;}
+.meal-items{font-size:13px;color:var(--text2);line-height:1.8;}
+.meal-items span{display:flex;gap:6px;align-items:baseline;}
+.meal-items span::before{content:"·";font-weight:700;flex-shrink:0;}
+.meal-footer{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px 12px;background:#f9fcfa;border-top:1px solid var(--border);}
+.mpill{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:500;}
+.mp-kcal{background:var(--amber-light);color:#7a4f0a;}
+.mp-prot{background:var(--green-light);color:var(--green-dark);}
+.mp-carb{background:var(--blue-light);color:var(--blue-dark);}
+
+/* CAT TITLE */
+.cat-title{display:flex;align-items:center;gap:8px;margin:18px 0 10px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;}
+.cat-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* COMBO */
+.combo-card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:12px;}
+.combo-lbl{font-size:12px;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em;}
+.combo-lbl.green{color:var(--green-dark);}
+.combo-lbl.blue{color:var(--blue-dark);}
+.combo-sel{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231D9E75' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;margin-bottom:12px;}
+.combo-result{background:var(--green-deep);border-radius:var(--radius-sm);padding:14px;display:flex;justify-content:space-around;margin:12px 0 10px;}
+.combo-result.blue{background:var(--blue-deep);}
+.cr-item{text-align:center;}
+.cr-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;}
+.combo-result .cr-lbl{color:var(--green-mid);}
+.combo-result.blue .cr-lbl{color:var(--blue-mid);}
+.cr-val{font-size:20px;font-weight:700;color:#fff;}
+.cr-sub{font-size:10px;color:rgba(255,255,255,0.5);}
+.alert{border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;line-height:1.5;margin-top:8px;display:none;}
+.alert.show{display:block;}
+.alert-ok{background:var(--green-light);color:var(--green-dark);border:1px solid #b8e8d4;}
+.alert-ok-blue{background:var(--blue-light);color:var(--blue-dark);border:1px solid #bcd4f8;}
+.alert-warn{background:var(--amber-light);color:#7a4f0a;border:1px solid #f0d494;}
+.alert-danger{background:var(--red-light);color:#7F1D1D;border:1px solid #f4b8b8;}
+
+/* SHOP */
+.shop-group{margin-bottom:16px;}
+.shop-group-title{font-size:13px;font-weight:700;margin-bottom:8px;}
+.shop-group-title.green{color:var(--green-dark);}
+.shop-group-title.blue{color:var(--blue-dark);}
+.shop-wrap{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+.shop-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;}
+.shop-item:last-child{border-bottom:none;}
+.shop-cb{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.shop-item.green-theme.checked .shop-cb{background:var(--green);border-color:var(--green);}
+.shop-item.blue-theme.checked .shop-cb{background:var(--blue);border-color:var(--blue);}
+.shop-item.checked .shop-cb::after{content:'✓';color:#fff;font-size:12px;font-weight:700;}
+.shop-item.checked .shop-name{color:var(--text3);text-decoration:line-through;}
+.shop-name{font-size:13px;color:var(--text);flex:1;}
+
+/* HORARIO */
+.horario-wrap{background:var(--card);border-radius:var(--radius);padding:4px 16px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.h-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.h-item:last-child{border-bottom:none;}
+.h-time{text-align:right;width:72px;flex-shrink:0;}
+.h-time-txt{font-size:12px;font-weight:700;}
+.h-time-txt.green{color:var(--green);}
+.h-time-txt.blue{color:var(--blue);}
+.h-time-txt.amber{color:var(--amber);}
+.h-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;border:2px solid #fff;}
+.h-dot.green{background:var(--green);box-shadow:0 0 0 2px var(--green);}
+.h-dot.blue{background:var(--blue);box-shadow:0 0 0 2px var(--blue);}
+.h-dot.amber{background:var(--amber);box-shadow:0 0 0 2px var(--amber);}
+.h-dot.purple{background:#9b8ed8;box-shadow:0 0 0 2px #9b8ed8;}
+.h-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.h-detail{font-size:12px;color:var(--text2);line-height:1.5;}
+
+.bottom-safe{height:env(safe-area-inset-bottom,0);flex-shrink:0;}
 </style>
 </head>
 <body>
 
-
-<!-- SPLASH SCREEN -->
-<div class="splash" id="splash">
-  <div class="splash-bg-circle1"></div>
-  <div class="splash-bg-circle2"></div>
-  <div class="splash-content">
-    <div class="splash-icon">🌿</div>
-    <div class="splash-hola">Bienvenida de vuelta</div>
-    <div class="splash-name">Laura</div>
-    <div class="splash-plan">Plan Fit</div>
-    <div class="splash-divider"></div>
-    <button class="splash-btn" onclick="enterApp()">Entrar a mi plan →</button>
-    <div class="splash-sub">Tu rutina y menú personalizado</div>
-    <div class="splash-dots">
-      <div class="splash-dot active"></div>
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
+<!-- HOME SPLASH -->
+<div class="home-splash" id="home-splash">
+  <div style="text-align:center;margin-bottom:48px;">
+    <div class="hs-logo">Plan <span>Fit</span></div>
+    <div class="hs-sub">Selecciona tu plan</div>
+  </div>
+  <div class="hs-cards">
+    <div class="hs-card laura" onclick="openPlan('laura')">
+      <div class="hs-card-tag">Plan personalizado</div>
+      <div class="hs-card-name">Laura</div>
+      <div class="hs-card-desc">56 años · Recomposición corporal</div>
+      <div class="hs-card-arrow">→</div>
+      <div class="hs-card-emoji">🌿</div>
+    </div>
+    <div class="hs-card manolo" onclick="openPlan('manolo')">
+      <div class="hs-card-tag">Plan personalizado</div>
+      <div class="hs-card-name">Manolo</div>
+      <div class="hs-card-desc">58 años · Bajar grasa y definir</div>
+      <div class="hs-card-arrow">→</div>
+      <div class="hs-card-emoji">💪</div>
     </div>
   </div>
 </div>
 
-
-<div class="header">
-  <div class="header-top">
-    <span class="header-greeting" id="greeting">Buenos días 👋</span>
-    <span class="header-day" id="dayName"></span>
-  </div>
-  <div class="header-title">Mi Plan <span>Fit</span></div>
-</div>
-
-<nav class="nav">
-  <button class="nav-btn active" onclick="showScreen('inicio')">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">Inicio</span>
-  </button>
-  <button class="nav-btn" onclick="showScreen('rutina')">
-    <span class="nav-icon">💪</span>
-    <span class="nav-label">Rutina</span>
-  </button>
-  <button class="nav-btn" onclick="showScreen('menu')">
-    <span class="nav-icon">🍽</span>
-    <span class="nav-label">Menú</span>
-  </button>
-  <button class="nav-btn" onclick="showScreen('combo')">
-    <span class="nav-icon">🎯</span>
-    <span class="nav-label">Combinador</span>
-  </button>
-  <button class="nav-btn" onclick="showScreen('compras')">
-    <span class="nav-icon">🛒</span>
-    <span class="nav-label">Compras</span>
-  </button>
-</nav>
-
-<main class="main">
-
-<!-- ═══ INICIO ═══ -->
-<div id="screen-inicio" class="screen active">
-  <div class="progress-banner">
-    <div class="pb-label">Tu progreso</div>
-    <div class="pb-title">Recomposición corporal</div>
-    <div class="pb-bars">
-      <div class="pb-row">
-        <span class="pb-name">% Grasa</span>
-        <div class="pb-bar-bg"><div class="pb-bar-fill" style="width:72%"></div></div>
-        <span class="pb-pct">38.5%</span>
-      </div>
-      <div class="pb-row">
-        <span class="pb-name">Meta grasa</span>
-        <div class="pb-bar-bg"><div class="pb-bar-fill" style="width:50%; background: #A8DFC8;"></div></div>
-        <span class="pb-pct">28%</span>
-      </div>
-      <div class="pb-row">
-        <span class="pb-name">Cintura</span>
-        <div class="pb-bar-bg"><div class="pb-bar-fill" style="width:82%; background: #E8A87C;"></div></div>
-        <span class="pb-pct">88 cm</span>
-      </div>
-      <div class="pb-row">
-        <span class="pb-name">Cadera</span>
-        <div class="pb-bar-bg"><div class="pb-bar-fill" style="width:76%; background: #E8A87C;"></div></div>
-        <span class="pb-pct">96 cm</span>
-      </div>
+<!-- LAURA APP -->
+<div class="app-wrapper" id="app-laura">
+  <div class="header green">
+    <div class="header-top">
+      <span class="header-greeting" id="laura-greeting">Buenos días 👋</span>
+      <button class="header-back" onclick="goHome()">← Planes</button>
     </div>
-
-    <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.12);">
-      <div style="font-size:10px; color:var(--green-mid); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">🎯 Objetivos meta</div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:10px 12px;">
-          <div style="font-size:10px; color:rgba(168,223,200,0.7); margin-bottom:2px;">Cintura meta</div>
-          <div style="font-size:20px; font-weight:700; color:#fff;">76–78</div>
-          <div style="font-size:10px; color:rgba(168,223,200,0.6);">cm · zona saludable</div>
+    <div class="header-title">Plan <span>Laura</span></div>
+  </div>
+  <nav class="nav green" id="laura-nav">
+    <button class="nav-btn active" onclick="showScreen('laura','inicio')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
+    <button class="nav-btn" onclick="showScreen('laura','rutina')"><span class="nav-icon">💪</span><span class="nav-label">Rutina</span></button>
+    <button class="nav-btn" onclick="showScreen('laura','menu')"><span class="nav-icon">🍽</span><span class="nav-label">Menú</span></button>
+    <button class="nav-btn" onclick="showScreen('laura','combo')"><span class="nav-icon">🎯</span><span class="nav-label">Combo</span></button>
+    <button class="nav-btn" onclick="showScreen('laura','compras')"><span class="nav-icon">🛒</span><span class="nav-label">Compras</span></button>
+  </nav>
+  <main class="main" id="laura-main">
+    <div id="laura-screen-inicio" class="screen active">
+      <div class="progress-banner green">
+        <div class="pb-label">Tu progreso</div>
+        <div class="pb-title">Recomposición corporal</div>
+        <div class="pb-bars">
+          <div class="pb-row"><span class="pb-name">% Grasa</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:72%;background:var(--green-mid)"></div></div><span class="pb-pct">38.5%</span></div>
+          <div class="pb-row"><span class="pb-name">Meta grasa</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:50%;background:rgba(168,223,200,0.6)"></div></div><span class="pb-pct">28%</span></div>
+          <div class="pb-row"><span class="pb-name">Cintura</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:82%;background:#E8A87C"></div></div><span class="pb-pct">88 cm</span></div>
+          <div class="pb-row"><span class="pb-name">Cadera</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:76%;background:#E8A87C"></div></div><span class="pb-pct">96 cm</span></div>
         </div>
-        <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:10px 12px;">
-          <div style="font-size:10px; color:rgba(168,223,200,0.7); margin-bottom:2px;">Cadera meta</div>
-          <div style="font-size:20px; font-weight:700; color:#fff;">92–94</div>
-          <div style="font-size:10px; color:rgba(168,223,200,0.6);">cm · proporción ideal</div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.12);">
+          <div style="font-size:10px;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">🎯 Objetivos meta</div>
+          <div class="meta-grid">
+            <div class="meta-box"><div class="meta-box-label">Cintura meta</div><div class="meta-box-val">76–78</div><div class="meta-box-sub">cm · zona saludable</div></div>
+            <div class="meta-box"><div class="meta-box-label">Cadera meta</div><div class="meta-box-val">92–94</div><div class="meta-box-sub">cm · proporción ideal</div></div>
+          </div>
+          <div class="meta-note">Medir cada 4 semanas · en ayunas · misma hora</div>
         </div>
       </div>
-      <div style="margin-top:8px; font-size:11px; color:rgba(168,223,200,0.6); text-align:center;">Medir cada 4 semanas · en ayunas · misma hora</div>
+      <div class="stat-grid">
+        <div class="stat-card accent-green"><div class="stat-label">Calorías/día</div><div class="stat-val">1,570</div><div class="stat-sub">kcal objetivo</div></div>
+        <div class="stat-card"><div class="stat-label">Proteína/día</div><div class="stat-val">110<span style="font-size:16px">g</span></div><div class="stat-sub">meta diaria</div></div>
+        <div class="stat-card"><div class="stat-label">IMC actual</div><div class="stat-val">21.6</div><div class="stat-sub">Peso normal ✓</div></div>
+        <div class="stat-card"><div class="stat-label">Tiempo gym</div><div class="stat-val">40<span style="font-size:16px">min</span></div><div class="stat-sub">5 días/semana</div></div>
+      </div>
+      <div class="section-title">Hoy entrenas</div>
+      <div class="section-sub" id="laura-today-sub"></div>
+      <div id="laura-today-card"></div>
+      <div class="section-title" style="margin-top:8px">Horario del día</div>
+      <div class="section-sub">Tus 2 comidas y el entrenamiento</div>
+      <div class="horario-wrap">
+        <div class="h-item"><div class="h-time"><span class="h-time-txt amber">7:00–8:00am</span></div><div class="h-dot amber"></div><div><div class="h-name">Pre-entreno</div><div class="h-detail">Plátano + agua con limón · 30 min antes</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt amber">8:30 am</span></div><div class="h-dot amber"></div><div><div class="h-name">Entrenamiento</div><div class="h-detail">40 minutos · superseries</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt green">9:10 am</span></div><div class="h-dot green"></div><div><div class="h-name">Stretching</div><div class="h-detail">10 min · cobra, mariposa, cuádriceps</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt green">11:00 am</span></div><div class="h-dot green"></div><div><div class="h-name">Desayuno</div><div class="h-detail">Avena con fruta + proteína</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt green">5:00–6:00pm</span></div><div class="h-dot green"></div><div><div class="h-name">Comida</div><div class="h-detail">Proteína + verduras</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt" style="color:#9b8ed8">10:00 pm</span></div><div class="h-dot purple"></div><div><div class="h-name">Dormir</div><div class="h-detail">8 horas · recuperación muscular</div></div></div>
+      </div>
     </div>
-  </div>
-
-  <div class="stat-grid">
-    <div class="stat-card green">
-      <div class="stat-label">Calorías/día</div>
-      <div class="stat-val">1,570</div>
-      <div class="stat-sub">kcal objetivo</div>
+    <div id="laura-screen-rutina" class="screen">
+      <div class="section-title">Rutina semanal</div>
+      <div class="section-sub">40 min · 5 días · superseries · toca cada ejercicio para ver cómo hacerlo</div>
+      <div class="day-pills" id="laura-day-pills"></div>
+      <div id="laura-workout-content"></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Proteína/día</div>
-      <div class="stat-val">110<span style="font-size:16px">g</span></div>
-      <div class="stat-sub">meta diaria</div>
+    <div id="laura-screen-menu" class="screen">
+      <div class="section-title">Menú del día</div>
+      <div class="section-sub">2 comidas · 11am y 5–6pm · ~1,570 kcal</div>
+      <div class="info-box green"><span class="info-icon">💡</span><span>La avena va como parte dulce del desayuno. La proteína va aparte en el mismo momento.</span></div>
+      <div class="cat-title">🥣 Avenas con fruta</div>
+      <div id="laura-avenas"></div>
+      <div class="cat-title">🍳 Proteínas del desayuno</div>
+      <div id="laura-proteinas"></div>
+      <div class="cat-title">🍽 Comidas (5–6pm)</div>
+      <div id="laura-comidas"></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">IMC actual</div>
-      <div class="stat-val">21.6</div>
-      <div class="stat-sub">Peso normal ✓</div>
+    <div id="laura-screen-combo" class="screen">
+      <div class="section-title">Combinador</div>
+      <div class="section-sub">Elige tu desayuno y comida. Te aviso si repites proteína o los macros están fuera de rango.</div>
+      <div class="combo-card">
+        <div class="combo-lbl green">🍳 Desayuno — 11am</div>
+        <select class="combo-sel" id="laura-des" onchange="calcCombo('laura')">
+          <option value="">— Elige tu desayuno —</option>
+          <optgroup label="🥣 Avena plátano +"><option value="800,38,huevo">Avena plátano + Huevos a la mexicana</option><option value="800,42,huevo">Avena plátano + Omelette de espinacas</option><option value="810,48,carne">Avena plátano + Bistec con huevo</option><option value="800,46,pollo">Avena plátano + Tacos de pollo</option></optgroup>
+          <optgroup label="🥣 Avena mango +"><option value="790,42,atun">Avena mango + Tostadas de atún</option><option value="790,36,huevo">Avena mango + Huevos divorciados</option><option value="790,46,pollo">Avena mango + Tacos de pollo</option></optgroup>
+          <optgroup label="🥣 Overnight fresas +"><option value="770,42,atun">Overnight fresas + Tostadas de atún</option><option value="780,38,huevo">Overnight fresas + Huevos a la mexicana</option><option value="780,46,pollo">Overnight fresas + Tacos de pollo</option></optgroup>
+          <optgroup label="🥣 Avena papaya +"><option value="785,42,huevo">Avena papaya + Omelette de espinacas</option><option value="795,48,carne">Avena papaya + Bistec con huevo</option></optgroup>
+          <optgroup label="🥣 Avena uvas/pera +"><option value="790,42,atun">Avena uvas + Tostadas de atún</option><option value="785,46,pollo">Avena pera + Tacos de pollo</option></optgroup>
+        </select>
+        <div class="combo-lbl green">🍽 Comida — 5–6pm</div>
+        <select class="combo-sel" id="laura-com" onchange="calcCombo('laura')">
+          <option value="">— Elige tu comida —</option>
+          <optgroup label="🍗 Pollo"><option value="770,55,pollo">Pollo al chipotle con brócoli</option><option value="780,55,pollo">Bowl de pollo con verduras asadas</option><option value="780,52,pollo">Tacos de pollo con nopales</option><option value="760,58,pollo">Pollo al horno con verduras</option></optgroup>
+          <optgroup label="🐟 Salmón y atún"><option value="770,55,salmon">Salmón con espinacas y quinoa</option><option value="770,52,salmon">Bowl de salmón asiático</option><option value="780,60,atun">Tostadas de atún con pico de gallo</option><option value="775,55,salmon">Salmón horneado con calabacita</option></optgroup>
+          <optgroup label="🥩 Carne roja"><option value="790,58,carne">Arrachera con nopales asados</option><option value="800,55,carne">Bistec en salsa roja con verduras</option><option value="780,55,carne">Milanesa sin empanizar con ensalada</option></optgroup>
+          <optgroup label="🥚 Huevo"><option value="760,60,huevo">Omelette relleno de verduras y atún</option><option value="770,52,huevo">Huevos en salsa verde con brócoli</option><option value="760,55,huevo">Ensalada de huevo con salmón</option></optgroup>
+        </select>
+        <div id="laura-combo-bar" class="combo-result" style="display:none">
+          <div class="cr-item"><div class="cr-lbl">Calorías</div><div class="cr-val" id="laura-cr-kcal">—</div><div class="cr-sub">meta ~1,570</div></div>
+          <div class="cr-item"><div class="cr-lbl">Proteína</div><div class="cr-val" id="laura-cr-prot">—</div><div class="cr-sub">meta ~110g</div></div>
+          <div class="cr-item"><div class="cr-lbl">Estado</div><div class="cr-val" id="laura-cr-status">—</div></div>
+        </div>
+        <div id="laura-alert-repeat" class="alert alert-warn"></div>
+        <div id="laura-alert-cal" class="alert alert-danger"></div>
+        <div id="laura-alert-prot" class="alert alert-warn"></div>
+        <div id="laura-alert-ok" class="alert alert-ok"></div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Tiempo gym</div>
-      <div class="stat-val">40<span style="font-size:16px">min</span></div>
-      <div class="stat-sub">5 días/semana</div>
+    <div id="laura-screen-compras" class="screen">
+      <div class="section-title">Lista de compras</div>
+      <div class="section-sub">Marca lo que ya tienes en casa</div>
+      <div id="laura-shop-list"></div>
     </div>
-  </div>
-
-  <div class="section-title" style="margin-top:4px">Hoy entrenas</div>
-  <div class="section-sub" id="today-workout-sub">Revisa tu rutina del día</div>
-  <div id="today-workout-card"></div>
-
-  <div class="section-title" style="margin-top:8px">Horario del día</div>
-  <div class="section-sub">Tus 2 comidas y el entrenamiento</div>
-  <div style="background:var(--card); border-radius:var(--radius); padding:4px 16px; box-shadow:var(--shadow); border:1px solid var(--border);">
-    <div class="horario-item">
-      <div class="horario-time-col"><div class="horario-time">7:00 – 8:00 am</div></div>
-      <div class="horario-dot"></div>
-      <div class="horario-content"><div class="horario-name">Pre-entreno</div><div class="horario-detail">Plátano + agua con limón · 30 min antes</div></div>
-    </div>
-    <div class="horario-item">
-      <div class="horario-time-col"><div class="horario-time">8:30 am</div></div>
-      <div class="horario-dot" style="background:var(--amber); box-shadow: 0 0 0 2px var(--amber);"></div>
-      <div class="horario-content"><div class="horario-name">Entrenamiento</div><div class="horario-detail">40 minutos · superseries</div></div>
-    </div>
-    <div class="horario-item">
-      <div class="horario-time-col"><div class="horario-time">9:10 am</div></div>
-      <div class="horario-dot"></div>
-      <div class="horario-content"><div class="horario-name">Stretching</div><div class="horario-detail">10 min · cobra, mariposa, cuádriceps</div></div>
-    </div>
-    <div class="horario-item">
-      <div class="horario-time-col"><div class="horario-time">11:00 am</div></div>
-      <div class="horario-dot"></div>
-      <div class="horario-content"><div class="horario-name">Desayuno</div><div class="horario-detail">Avena con fruta + proteína</div></div>
-    </div>
-    <div class="horario-item">
-      <div class="horario-time-col"><div class="horario-time">5:00 – 6:00 pm</div></div>
-      <div class="horario-dot"></div>
-      <div class="horario-content"><div class="horario-name">Comida</div><div class="horario-detail">Proteína + verduras</div></div>
-    </div>
-    <div class="horario-item" style="border:none">
-      <div class="horario-time-col"><div class="horario-time">10:00 pm</div></div>
-      <div class="horario-dot" style="background:#9b8ed8; box-shadow: 0 0 0 2px #9b8ed8;"></div>
-      <div class="horario-content"><div class="horario-name">Dormir</div><div class="horario-detail">8 horas · recuperación muscular</div></div>
-    </div>
-  </div>
+  </main>
+  <div class="bottom-safe" style="background:var(--green-deep)"></div>
 </div>
 
-<!-- ═══ RUTINA ═══ -->
-<div id="screen-rutina" class="screen">
-  <div class="section-title">Rutina semanal</div>
-  <div class="section-sub">40 min · 5 días · superseries y cardio HIIT</div>
-  <div class="day-pills" id="day-pills"></div>
-  <div id="workout-content"></div>
-</div>
-
-<!-- ═══ MENÚ ═══ -->
-<div id="screen-menu" class="screen">
-  <div class="section-title">Menú del día</div>
-  <div class="section-sub">2 comidas · 11am y 5–6pm · ~1,570 kcal</div>
-
-  <div class="info-box green">
-    <span class="info-icon">💡</span>
-    <span>La avena con fruta va como parte dulce del desayuno. La proteína va aparte en el mismo momento.</span>
-  </div>
-
-  <div class="cat-title">🥣 Avenas con fruta</div>
-  <div id="avenas-list"></div>
-
-  <div class="cat-title">🍳 Proteínas del desayuno</div>
-  <div id="proteinas-list"></div>
-
-  <div class="cat-title">🍽 Comidas (5–6pm)</div>
-  <div id="comidas-list"></div>
-</div>
-
-<!-- ═══ COMBINADOR ═══ -->
-<div id="screen-combo" class="screen">
-  <div class="section-title">Combinador del día</div>
-  <div class="section-sub">Elige tu desayuno y comida. Te aviso si repites proteína o los macros están fuera de rango.</div>
-
-  <div class="combo-card">
-    <div class="combo-label">🍳 Desayuno — 11am</div>
-    <select class="combo-select" id="combo-des" onchange="calcCombo()">
-      <option value="">— Elige tu desayuno —</option>
-      <optgroup label="🥣 Avena plátano +">
-        <option value="800,38,huevo">Avena plátano + Huevos a la mexicana</option>
-        <option value="800,42,huevo">Avena plátano + Omelette de espinacas</option>
-        <option value="810,48,carne">Avena plátano + Bistec con huevo</option>
-        <option value="800,46,pollo">Avena plátano + Tacos de pollo</option>
-      </optgroup>
-      <optgroup label="🥣 Avena mango +">
-        <option value="790,42,atun">Avena mango + Tostadas de atún</option>
-        <option value="790,36,huevo">Avena mango + Huevos divorciados</option>
-        <option value="790,46,pollo">Avena mango + Tacos de pollo</option>
-      </optgroup>
-      <optgroup label="🥣 Overnight fresas +">
-        <option value="770,42,atun">Overnight fresas + Tostadas de atún</option>
-        <option value="780,38,huevo">Overnight fresas + Huevos a la mexicana</option>
-        <option value="780,46,pollo">Overnight fresas + Tacos de pollo</option>
-      </optgroup>
-      <optgroup label="🥣 Avena papaya +">
-        <option value="785,42,huevo">Avena papaya + Omelette de espinacas</option>
-        <option value="795,48,carne">Avena papaya + Bistec con huevo</option>
-      </optgroup>
-      <optgroup label="🥣 Avena uvas/pera +">
-        <option value="790,42,atun">Avena uvas + Tostadas de atún</option>
-        <option value="785,46,pollo">Avena pera + Tacos de pollo</option>
-      </optgroup>
-    </select>
-
-    <div class="combo-label">🍽 Comida — 5–6pm</div>
-    <select class="combo-select" id="combo-com" onchange="calcCombo()">
-      <option value="">— Elige tu comida —</option>
-      <optgroup label="🍗 Pollo">
-        <option value="770,55,pollo">Pollo al chipotle con brócoli</option>
-        <option value="780,55,pollo">Bowl de pollo con verduras asadas</option>
-        <option value="780,52,pollo">Tacos de pollo con nopales</option>
-        <option value="760,58,pollo">Pollo al horno con verduras</option>
-      </optgroup>
-      <optgroup label="🐟 Salmón y atún">
-        <option value="770,55,salmon">Salmón con espinacas y quinoa</option>
-        <option value="770,52,salmon">Bowl de salmón asiático</option>
-        <option value="780,60,atun">Tostadas de atún con pico de gallo</option>
-        <option value="775,55,salmon">Salmón horneado con calabacita</option>
-      </optgroup>
-      <optgroup label="🥩 Carne roja">
-        <option value="790,58,carne">Arrachera con nopales asados</option>
-        <option value="800,55,carne">Bistec en salsa roja con verduras</option>
-        <option value="780,55,carne">Milanesa sin empanizar con ensalada</option>
-      </optgroup>
-      <optgroup label="🥚 Huevo">
-        <option value="760,60,huevo">Omelette relleno de verduras y atún</option>
-        <option value="770,52,huevo">Huevos en salsa verde con brócoli</option>
-        <option value="760,55,huevo">Ensalada de huevo con salmón</option>
-      </optgroup>
-    </select>
-
-    <div id="combo-result-bar" class="combo-result-bar" style="display:none">
-      <div class="cr-item"><div class="cr-label">Calorías</div><div class="cr-val" id="cr-kcal">—</div><div class="cr-sub">meta ~1,570</div></div>
-      <div class="cr-item"><div class="cr-label">Proteína</div><div class="cr-val" id="cr-prot">—</div><div class="cr-sub">meta ~110g</div></div>
-      <div class="cr-item"><div class="cr-label">Estado</div><div class="cr-val" id="cr-status">—</div></div>
+<!-- MANOLO APP -->
+<div class="app-wrapper" id="app-manolo">
+  <div class="header blue">
+    <div class="header-top">
+      <span class="header-greeting" id="manolo-greeting">Buenos días 👋</span>
+      <button class="header-back" onclick="goHome()">← Planes</button>
     </div>
-
-    <div id="alert-repeat" class="alert alert-warn"></div>
-    <div id="alert-cal" class="alert alert-danger"></div>
-    <div id="alert-prot" class="alert alert-warn"></div>
-    <div id="alert-ok" class="alert alert-ok"></div>
+    <div class="header-title">Plan <span>Manolo</span></div>
   </div>
-
-  <div class="info-box amber">
-    <span class="info-icon">⚠️</span>
-    <span>Evita repetir la misma proteína en las 2 comidas del día para que el cuerpo reciba mayor variedad de aminoácidos.</span>
-  </div>
+  <nav class="nav blue" id="manolo-nav">
+    <button class="nav-btn active" onclick="showScreen('manolo','inicio')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
+    <button class="nav-btn" onclick="showScreen('manolo','rutina')"><span class="nav-icon">💪</span><span class="nav-label">Rutina</span></button>
+    <button class="nav-btn" onclick="showScreen('manolo','alimentacion')"><span class="nav-icon">🍽</span><span class="nav-label">Comidas</span></button>
+    <button class="nav-btn" onclick="showScreen('manolo','combo')"><span class="nav-icon">🎯</span><span class="nav-label">Combo</span></button>
+    <button class="nav-btn" onclick="showScreen('manolo','compras')"><span class="nav-icon">🛒</span><span class="nav-label">Compras</span></button>
+  </nav>
+  <main class="main" id="manolo-main">
+    <div id="manolo-screen-inicio" class="screen active">
+      <div class="progress-banner blue">
+        <div class="pb-label">Tu progreso</div>
+        <div class="pb-title">Bajar grasa y definir</div>
+        <div class="pb-bars">
+          <div class="pb-row"><span class="pb-name">% Grasa</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:65%;background:var(--blue-mid)"></div></div><span class="pb-pct">28.5%</span></div>
+          <div class="pb-row"><span class="pb-name">Meta grasa</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:40%;background:rgba(147,197,253,0.6)"></div></div><span class="pb-pct">18-20%</span></div>
+          <div class="pb-row"><span class="pb-name">Cintura</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:88%;background:#E8A87C"></div></div><span class="pb-pct">100 cm</span></div>
+          <div class="pb-row"><span class="pb-name">Cadera</span><div class="pb-bar-bg"><div class="pb-bar-fill" style="width:70%;background:#E8A87C"></div></div><span class="pb-pct">102 cm</span></div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.12);">
+          <div style="font-size:10px;color:var(--blue-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">🎯 Objetivos meta</div>
+          <div class="meta-grid">
+            <div class="meta-box"><div class="meta-box-label" style="color:var(--blue-mid)">Cintura meta</div><div class="meta-box-val">–90</div><div class="meta-box-sub">cm · menos de 90</div></div>
+            <div class="meta-box"><div class="meta-box-label" style="color:var(--blue-mid)">Grasa meta</div><div class="meta-box-val">18–20%</div><div class="meta-box-sub">zona saludable</div></div>
+          </div>
+          <div class="meta-note">Medir cada 4 semanas · en ayunas · misma hora</div>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card accent-blue"><div class="stat-label">Calorías/día</div><div class="stat-val">2,100</div><div class="stat-sub">kcal objetivo</div></div>
+        <div class="stat-card"><div class="stat-label">Proteína/día</div><div class="stat-val">140<span style="font-size:16px">g</span></div><div class="stat-sub">meta diaria</div></div>
+        <div class="stat-card"><div class="stat-label">IMC actual</div><div class="stat-val">28.7</div><div class="stat-sub">⚠️ Exceso de peso</div></div>
+        <div class="stat-card"><div class="stat-label">Tiempo gym</div><div class="stat-val">60<span style="font-size:16px">min</span></div><div class="stat-sub">5 días/semana</div></div>
+      </div>
+      <div class="info-box red"><span class="info-icon">🦴</span><span>Clavícula izquierda con clavo: NO elevar el brazo izquierdo por encima del hombro con carga. Siempre rango parcial sin dolor.</span></div>
+      <div class="section-title">Hoy entrenas</div>
+      <div class="section-sub" id="manolo-today-sub"></div>
+      <div id="manolo-today-card"></div>
+      <div class="section-title" style="margin-top:8px">Horario del día</div>
+      <div class="horario-wrap">
+        <div class="h-item"><div class="h-time"><span class="h-time-txt amber">6:00 am</span></div><div class="h-dot amber"></div><div><div class="h-name">Pre-entreno</div><div class="h-detail">Plátano + café negro · 30 min antes</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt amber">6:30 am</span></div><div class="h-dot amber"></div><div><div class="h-name">Entrenamiento</div><div class="h-detail">60 minutos · superseries</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt blue">7:30 am</span></div><div class="h-dot blue"></div><div><div class="h-name">Stretching + colación</div><div class="h-detail">10 min · luego plátano + almendras</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt blue">8:30 am</span></div><div class="h-dot blue"></div><div><div class="h-name">Desayuno</div><div class="h-detail">Huevos + frijoles + tortillas</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt blue">1:00 pm</span></div><div class="h-dot blue"></div><div><div class="h-name">Comida principal</div><div class="h-detail">Proteína + carbohidrato + ensalada</div></div></div>
+        <div class="h-item"><div class="h-time"><span class="h-time-txt blue">7:00 pm</span></div><div class="h-dot blue"></div><div><div class="h-name">Cena</div><div class="h-detail">Salmón o pavo + verduras al vapor</div></div></div>
+      </div>
+    </div>
+    <div id="manolo-screen-rutina" class="screen">
+      <div class="section-title">Rutina semanal</div>
+      <div class="section-sub">60 min · 5 días · toca cada ejercicio para ver cómo hacerlo</div>
+      <div class="info-box red"><span class="info-icon">🦴</span><span>Brazo izquierdo siempre en rango parcial. Si sientes molestia en la clavícula, para el movimiento.</span></div>
+      <div class="day-pills" id="manolo-day-pills"></div>
+      <div id="manolo-workout-content"></div>
+    </div>
+    <div id="manolo-screen-alimentacion" class="screen">
+      <div class="section-title">Plan alimenticio</div>
+      <div class="section-sub">2,100 kcal · 140g proteína · 4 comidas al día</div>
+      <div class="info-box blue"><span class="info-icon">💡</span><span>A los 58 años la proteína alta es clave para no perder músculo mientras se baja de peso.</span></div>
+      <div class="cat-title">Desayuno</div>
+      <div class="meal-card"><div class="meal-hdr blue"><span class="meal-hdr-title">🍳 Desayuno proteico</span><span class="meal-time-pill">8:00 am</span></div><div class="meal-body"><div class="meal-items"><span>4 claras + 2 huevos enteros con jitomate, cebolla y chile</span><span>½ taza frijoles negros + 2 tortillas de maíz</span><span>Café negro sin azúcar</span></div></div><div class="meal-footer"><span class="mpill mp-kcal">~480 kcal</span><span class="mpill mp-prot">42g prot</span><span class="mpill mp-carb">38g carbs</span></div></div>
+      <div class="cat-title">Comida</div>
+      <div class="meal-card"><div class="meal-hdr blue"><span class="meal-hdr-title">🍗 Comida principal</span><span class="meal-time-pill">1:00 pm</span></div><div class="meal-body"><div class="meal-items"><span>200g pechuga de pollo o filete de res magro a la plancha</span><span>½ taza arroz integral o quinoa</span><span>Ensalada grande: lechuga, jitomate, pepino, zanahoria</span><span>1 cdita aceite de oliva + agua con limón</span></div></div><div class="meal-footer"><span class="mpill mp-kcal">~580 kcal</span><span class="mpill mp-prot">52g prot</span><span class="mpill mp-carb">45g carbs</span></div></div>
+      <div class="cat-title">Post-entreno</div>
+      <div class="meal-card"><div class="meal-hdr blue"><span class="meal-hdr-title">🐟 Colación post-entreno</span><span class="meal-time-pill">5:10 pm</span></div><div class="meal-body"><div class="meal-items"><span>1 lata de atún en agua + 1 plátano mediano</span><span>10 almendras</span><span>1 vaso de leche descremada o de soya</span></div></div><div class="meal-footer"><span class="mpill mp-kcal">~380 kcal</span><span class="mpill mp-prot">32g prot</span><span class="mpill mp-carb">38g carbs</span></div></div>
+      <div class="cat-title">Cena</div>
+      <div class="meal-card"><div class="meal-hdr blue"><span class="meal-hdr-title">🥗 Cena ligera</span><span class="meal-time-pill">7:30 pm</span></div><div class="meal-body"><div class="meal-items"><span>180g salmón o pechuga de pavo a la plancha</span><span>Verduras al vapor: brócoli, calabacita, ejotes</span><span>½ taza frijoles negros o 1 tortilla de maíz</span></div></div><div class="meal-footer"><span class="mpill mp-kcal">~460 kcal</span><span class="mpill mp-prot">48g prot</span><span class="mpill mp-carb">28g carbs</span></div></div>
+      <div style="background:var(--color-background-secondary,#f4f7f5);border-radius:var(--radius);padding:12px 16px;margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="mpill mp-kcal" style="font-size:13px;padding:5px 12px;">~1,900–2,100 kcal</span>
+        <span class="mpill mp-prot" style="font-size:13px;padding:5px 12px;">174g proteína</span>
+        <span class="mpill mp-carb" style="font-size:13px;padding:5px 12px;">~149g carbs</span>
+      </div>
+    </div>
+    <div id="manolo-screen-combo" class="screen">
+      <div class="section-title">Combinador</div>
+      <div class="section-sub">Elige tus comidas del día. Te aviso si repites proteína o los macros no cuadran.</div>
+      <div class="combo-card">
+        <div class="combo-lbl blue">🍳 Desayuno — 8:30am</div>
+        <select class="combo-sel" id="manolo-des" onchange="calcCombo('manolo')">
+          <option value="">— Elige tu desayuno —</option>
+          <optgroup label="🍳 Huevos clásicos">
+            <option value="650,48,huevo">Huevos a la mexicana con frijoles y 3 tortillas</option>
+            <option value="620,44,huevo">Huevos revueltos con espinacas, frijoles y 2 tortillas</option>
+            <option value="700,52,huevo">Huevos con bistec (150g) y 2 tortillas</option>
+            <option value="640,46,huevo">Huevos divorciados con frijoles y 2 tortillas</option>
+            <option value="630,44,huevo">Huevos en salsa verde con frijoles y arroz</option>
+            <option value="660,50,huevo">Huevos con chorizo de pavo, frijoles y tortillas</option>
+            <option value="650,46,huevo">Huevos pochados con aguacate, frijoles y tostadas</option>
+          </optgroup>
+          <optgroup label="🥚 Omelettes completos">
+            <option value="640,50,huevo">Omelette grande de espinacas, queso y frijoles</option>
+            <option value="650,52,huevo">Omelette de champiñones, pimiento y arroz</option>
+            <option value="670,54,huevo">Omelette de pollo deshebrado (150g) con frijoles</option>
+            <option value="645,50,huevo">Omelette de nopales, queso y 2 tortillas</option>
+          </optgroup>
+          <optgroup label="🐟 Con proteína extra">
+            <option value="700,56,salmon">Salmón (150g) con huevo revuelto, arroz y verduras</option>
+            <option value="710,58,carne">Bistec (180g) con 2 huevos estrellados y 3 tortillas</option>
+            <option value="680,54,pollo">Tacos de pollo deshebrado (180g) con salsa verde</option>
+            <option value="690,52,pollo">Chilaquiles verdes con pollo (150g) y queso fresco</option>
+          </optgroup>
+        </select>
+        <div class="combo-lbl blue">🍗 Comida — 1pm</div>
+        <select class="combo-sel" id="manolo-com" onchange="calcCombo('manolo')">
+          <option value="">— Elige tu comida —</option>
+          <optgroup label="🍗 Pollo">
+            <option value="750,58,pollo">Pollo (200g) a la plancha con arroz y ensalada grande</option>
+            <option value="730,56,pollo">Pollo (200g) al chipotle con brócoli y arroz integral</option>
+            <option value="740,57,pollo">Bowl de pollo (200g) con verduras asadas y quinoa</option>
+            <option value="745,56,pollo">Tacos de pollo (200g) con nopales y guacamole</option>
+            <option value="755,58,pollo">Pollo horneado (200g) con camote y ejotes</option>
+            <option value="760,60,pollo">Pechuga (200g) con ensalada César fit y arroz</option>
+          </optgroup>
+          <optgroup label="🥩 Carne roja">
+            <option value="770,62,carne">Bistec (200g) con arroz integral y ensalada</option>
+            <option value="760,60,carne">Arrachera (200g) con nopales y frijoles</option>
+            <option value="765,61,carne">Milanesa sin empanizar (200g) con verduras asadas</option>
+            <option value="758,60,carne">Bistec (200g) en salsa roja con calabacita y arroz</option>
+            <option value="770,62,carne">Carne asada (200g) con guacamole y 3 tortillas</option>
+          </optgroup>
+          <optgroup label="🐟 Pescado">
+            <option value="730,58,salmon">Salmón (200g) con quinoa y espinacas salteadas</option>
+            <option value="720,60,atun">Tostadas de atún (2 latas) con pico de gallo y aguacate</option>
+            <option value="735,58,salmon">Bowl de salmón (200g) estilo asiático con arroz</option>
+            <option value="725,57,salmon">Salmón (200g) horneado con brócoli y frijoles</option>
+            <option value="730,62,atun">Ensalada grande de atún (2 latas) con aguacate y quinoa</option>
+          </optgroup>
+        </select>
+        <div class="combo-lbl blue">🌙 Cena — 7pm</div>
+        <select class="combo-sel" id="manolo-cen" onchange="calcCombo('manolo')">
+          <option value="">— Elige tu cena —</option>
+          <optgroup label="🧀 Quesadillas fit">
+            <option value="620,46,pollo">Quesadilla de pollo (150g) con espinacas · 2 tortillas maíz</option>
+            <option value="610,44,pollo">Quesadilla de pechuga (150g) con champiñones · 2 tortillas</option>
+            <option value="630,48,carne">Quesadilla de bistec (150g) con chile y cebolla · 2 tortillas</option>
+            <option value="600,44,huevo">Quesadilla de huevo con nopales y queso fresco · 2 tortillas</option>
+            <option value="620,46,salmon">Quesadilla de salmón (130g) con espinacas · 2 tortillas</option>
+            <option value="615,44,pollo">Quesadilla de pavo (150g) con jalapeño · 2 tortillas</option>
+          </optgroup>
+          <optgroup label="🐟 Pescado">
+            <option value="600,54,salmon">Salmón (180g) a la plancha con verduras al vapor y frijoles</option>
+            <option value="580,52,atun">Atún (2 latas) con ensalada grande, aguacate y tortilla</option>
+            <option value="590,53,salmon">Salmón (180g) horneado con brócoli, limón y quinoa</option>
+            <option value="585,51,atun">Tostadas de atún (2 latas) con aguacate y pico de gallo</option>
+          </optgroup>
+          <optgroup label="🍗 Pollo y pavo">
+            <option value="595,54,pollo">Pechuga de pavo (180g) con brócoli y frijoles negros</option>
+            <option value="600,55,pollo">Pollo (180g) al horno con calabacita, ejotes y tortilla</option>
+            <option value="590,52,pollo">Pollo deshebrado (180g) con ensalada y 2 tortillas</option>
+            <option value="605,54,pollo">Pavo (180g) con nopales, frijoles negros y arroz</option>
+          </optgroup>
+          <optgroup label="🥚 Huevo">
+            <option value="560,48,huevo">Omelette de 4 claras + 2 huevos con verduras y frijoles</option>
+            <option value="570,46,huevo">Huevos (3) con frijoles, nopales y 2 tortillas</option>
+            <option value="580,50,huevo">Omelette grande de champiñones, espinacas y queso</option>
+          </optgroup>
+          <optgroup label="🥩 Carne">
+            <option value="610,54,carne">Bistec (180g) a la plancha con ensalada y 2 tortillas</option>
+            <option value="600,52,carne">Milanesa sin empanizar (180g) con verduras y frijoles</option>
+          </optgroup>
+        </select>
+        <div id="manolo-combo-bar" class="combo-result blue" style="display:none">
+          <div class="cr-item"><div class="cr-lbl" style="color:var(--blue-mid)">Calorías</div><div class="cr-val" id="manolo-cr-kcal">—</div><div class="cr-sub">meta ~2,100</div></div>
+          <div class="cr-item"><div class="cr-lbl" style="color:var(--blue-mid)">Proteína</div><div class="cr-val" id="manolo-cr-prot">—</div><div class="cr-sub">meta ~140g</div></div>
+          <div class="cr-item"><div class="cr-lbl" style="color:var(--blue-mid)">Estado</div><div class="cr-val" id="manolo-cr-status">—</div></div>
+        </div>
+        <div id="manolo-alert-repeat" class="alert alert-warn"></div>
+        <div id="manolo-alert-cal" class="alert alert-danger"></div>
+        <div id="manolo-alert-prot" class="alert alert-warn"></div>
+        <div id="manolo-alert-ok" class="alert" style="background:var(--blue-light);color:var(--blue-dark);border:1px solid #bcd4f8;"></div>
+      </div>
+    </div>
+    <div id="manolo-screen-compras" class="screen">
+      <div class="section-title">Lista de compras</div>
+      <div class="section-sub">Marca lo que ya tienes</div>
+      <div id="manolo-shop-list"></div>
+    </div>
+  </main>
+  <div class="bottom-safe" style="background:var(--blue-deep)"></div>
 </div>
-
-<!-- ═══ COMPRAS ═══ -->
-<div id="screen-compras" class="screen">
-  <div class="section-title">Lista de compras</div>
-  <div class="section-sub">Marca lo que ya tienes en casa</div>
-  <div id="shop-list"></div>
-</div>
-
-</main>
-<div class="bottom-safe"></div>
 
 <script>
-// ─── DATA ───
-
-const DAYS = [
-  { name: 'Lunes', short: 'Lun', focus: 'Pecho, hombros y tríceps',
-    timeBar: [{cls:'ts-warm',flex:5,label:'5 min'},{cls:'ts-work',flex:20,label:'20 min'},{cls:'ts-ab',flex:8,label:'Abdomen'},{cls:'ts-cardio',flex:7,label:'Cardio'}],
-    exercises: [
-      {name:'Caminadora calentamiento', sets:'1', reps:'10 min', tag:'cardio', tagLabel:'Cardio'},
-      {name:'A1 · Press de pecho en máquina', sets:'3', reps:'12', tag:'multi', tagLabel:'Multi'},
-      {name:'A2 · Aperturas con polea', sets:'3', reps:'12', tag:'multi', tagLabel:'Super'},
-      {name:'B1 · Press de hombro sentada', sets:'3', reps:'12', tag:'multi', tagLabel:'Multi'},
-      {name:'B2 · Elevaciones laterales polea', sets:'3', reps:'15', tag:'multi', tagLabel:'Super'},
-      {name:'C1 · Extensiones de tríceps polea', sets:'3', reps:'15', tag:'multi', tagLabel:'Multi'},
-      {name:'Crunch en máquina', sets:'3', reps:'20', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Plancha frontal', sets:'3', reps:'30 seg', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Elíptica final', sets:'1', reps:'7 min', tag:'cardio', tagLabel:'Cardio'},
-    ]},
-  { name: 'Martes', short: 'Mar', focus: 'Glúteos, piernas y aductores',
-    timeBar: [{cls:'ts-warm',flex:5,label:'5 min'},{cls:'ts-work',flex:22,label:'22 min'},{cls:'ts-cardio',flex:8,label:'Cardio'},{cls:'ts-ab',flex:5,label:'Liga'}],
-    exercises: [
-      {name:'Caminadora calentamiento', sets:'1', reps:'10 min', tag:'cardio', tagLabel:'Cardio'},
-      {name:'A1 · Extensiones de pierna', sets:'3', reps:'15', tag:'multi', tagLabel:'Multi'},
-      {name:'A2 · Curl femoral', sets:'3', reps:'15', tag:'multi', tagLabel:'Super'},
-      {name:'B1 · Sentadilla con cable', sets:'3', reps:'15', tag:'multi', tagLabel:'Multi'},
-      {name:'B2 · Abducción de cadera en polea', sets:'3', reps:'15 c/l', tag:'multi', tagLabel:'Super'},
-      {name:'C1 · Elevación de talones', sets:'3', reps:'20', tag:'multi', tagLabel:'Multi'},
-      {name:'Aducción acostada con liga', sets:'2', reps:'20 c/l', tag:'liga', tagLabel:'Liga'},
-      {name:'Sentadilla sumo con liga', sets:'2', reps:'15', tag:'liga', tagLabel:'Liga'},
-      {name:'Caminadora inclinada 12%', sets:'1', reps:'8 min', tag:'cardio', tagLabel:'Cardio'},
-    ]},
-  { name: 'Miércoles', short: 'Mié', focus: 'HIIT + oblicuos y core',
-    timeBar: [{cls:'ts-warm',flex:3,label:'3 min'},{cls:'ts-cardio',flex:20,label:'HIIT 20 min'},{cls:'ts-ab',flex:12,label:'Abdomen'},{cls:'ts-work',flex:5,label:'Liga'}],
-    exercises: [
-      {name:'Elíptica calentamiento suave', sets:'1', reps:'3 min', tag:'cardio', tagLabel:'Cardio'},
-      {name:'HIIT caminadora (2 min normal / 1 min rápido)', sets:'1', reps:'20 min', tag:'cardio', tagLabel:'HIIT'},
-      {name:'Rotación de torso con cable', sets:'3', reps:'15 c/l', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Plancha lateral', sets:'3', reps:'25 seg c/l', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Bicicleta en suelo', sets:'3', reps:'20 c/l', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Aducción isométrica liga entre rodillas', sets:'3', reps:'30 seg', tag:'liga', tagLabel:'Liga'},
-      {name:'Caminadora inclinada', sets:'1', reps:'10 min', tag:'cardio', tagLabel:'Cardio'},
-    ]},
-  { name: 'Jueves', short: 'Jue', focus: 'Espalda y bíceps',
-    timeBar: [{cls:'ts-warm',flex:5,label:'5 min'},{cls:'ts-work',flex:28,label:'28 min'},{cls:'ts-cardio',flex:7,label:'Cardio'}],
-    exercises: [
-      {name:'Elíptica calentamiento', sets:'1', reps:'5 min', tag:'cardio', tagLabel:'Cardio'},
-      {name:'A1 · Jalón al pecho agarre ancho', sets:'3', reps:'12', tag:'multi', tagLabel:'Multi'},
-      {name:'A2 · Remo sentada en polea', sets:'3', reps:'12', tag:'multi', tagLabel:'Super'},
-      {name:'B1 · Pull-over con mancuerna (5 kg)', sets:'3', reps:'12', tag:'new', tagLabel:'Nuevo'},
-      {name:'B2 · Curl de bíceps en polea baja', sets:'3', reps:'15', tag:'multi', tagLabel:'Super'},
-      {name:'Caminadora inclinada', sets:'1', reps:'7 min', tag:'cardio', tagLabel:'Cardio'},
-    ]},
-  { name: 'Viernes', short: 'Vie', focus: 'Cuerpo completo + quema grasa',
-    timeBar: [{cls:'ts-warm',flex:5,label:'5 min'},{cls:'ts-work',flex:18,label:'18 min'},{cls:'ts-ab',flex:7,label:'Abdomen'},{cls:'ts-cardio',flex:10,label:'HIIT'}],
-    exercises: [
-      {name:'Caminadora intervalos (1 min rápido / 2 min normal)', sets:'1', reps:'20 min', tag:'cardio', tagLabel:'HIIT'},
-      {name:'Press pecho + jalón espalda', sets:'3', reps:'12 c/u', tag:'multi', tagLabel:'Super'},
-      {name:'Curl femoral + extensión pierna', sets:'3', reps:'15 c/u', tag:'multi', tagLabel:'Super'},
-      {name:'Aducción de pie con liga en tobillo', sets:'2', reps:'15 c/l', tag:'liga', tagLabel:'Liga'},
-      {name:'Crunch inverso en suelo', sets:'3', reps:'15', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Tijeras en suelo', sets:'2', reps:'20 c/l', tag:'ab', tagLabel:'Abdomen'},
-      {name:'Elíptica HIIT final', sets:'1', reps:'10 min', tag:'cardio', tagLabel:'HIIT'},
-    ]},
-  { name: 'Sábado', short: 'Sáb', rest: true },
-  { name: 'Domingo', short: 'Dom', rest: true },
+// ═══════════════════════════════════════
+// DATA — LAURA
+// ═══════════════════════════════════════
+const LAURA_DAYS = [
+  {name:'Lunes',short:'Lun',focus:'Pecho, hombros y tríceps',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work',f:20,l:'20min'},{c:'ts-ab',f:8,l:'Abd'},{c:'ts-cardio',f:7,l:'Cardio'}],
+   exs:[
+     {n:'Caminadora calentamiento',s:'1',r:'10 min',t:'cardio',tl:'Cardio',e:'🏃',h:'Camina a ritmo ligero para calentar articulaciones y elevar la temperatura corporal antes de entrenar.',tip:'Velocidad 4–5 km/h · sin inclinación · brazos sueltos'},
+     {n:'A1 · Press de pecho en máquina',s:'3',r:'12',t:'multi',tl:'Multi',e:'🏋️',h:'Siéntate en la máquina de press, agarra las manijas a la altura del pecho. Empuja hacia adelante extendiendo los brazos, regresa lento.',tip:'Espalda pegada al respaldo · no bloquees los codos al extender · baja lento en 3 seg'},
+     {n:'A2 · Aperturas con polea',s:'3',r:'12',t:'super',tl:'Super',e:'🤸',h:'Parada frente a la polea, toma ambos cables. Con brazos casi rectos, cruza las manos frente al pecho como si abrazar un árbol grande.',tip:'Mantén el pecho arriba · codos ligeramente doblados · movimiento lento y controlado'},
+     {n:'B1 · Press de hombro sentada',s:'3',r:'12',t:'multi',tl:'Multi',e:'💪',h:'Sentada, toma las manijas a la altura de los hombros. Empuja hacia arriba sin bloquear los codos, baja lento.',tip:'No arquees la espalda baja · sube en 2 seg · baja en 3 seg'},
+     {n:'B2 · Elevaciones laterales en polea',s:'3',r:'15',t:'super',tl:'Super',e:'🙆',h:'De pie junto a la polea baja, toma el cable con la mano contraria. Eleva el brazo lateral hasta la altura del hombro.',tip:'Codo ligeramente doblado · no subas más del hombro · control al bajar'},
+     {n:'C1 · Extensiones de tríceps polea',s:'3',r:'15',t:'multi',tl:'Multi',e:'💪',h:'De pie frente a la polea alta, codos pegados al cuerpo. Empuja el cable hacia abajo extendiendo los brazos, regresa lento.',tip:'Codos fijos a los costados · muñecas rectas · aprieta el tríceps abajo'},
+     {n:'Crunch en máquina',s:'3',r:'20',t:'ab',tl:'Abdomen',e:'🫄',h:'Siéntate en la máquina, toma las manijas. Flexiona el torso hacia adelante contrayendo el abdomen, regresa lento sin soltar completamente.',tip:'No uses impulso · exhala al bajar · mantén 1 seg en tensión'},
+     {n:'Plancha frontal',s:'3',r:'30 seg',t:'ab',tl:'Abdomen',e:'🧘',h:'Apóyate en los antebrazos y puntas de los pies. Mantén el cuerpo recto de cabeza a talones, contrae abdomen y glúteos.',tip:'No dejes caer las caderas · respira normal · mira al suelo'},
+     {n:'Elevación de rodillas en polea baja',s:'3',r:'15',t:'multi',tl:'Multi',e:'🦵',h:'Sujeta la polea con ambas manos para apoyo. Eleva las rodillas al pecho contrayendo el abdomen, baja lento.',tip:'Movimiento lento y controlado · no uses impulso · contrae el core'},
+     {n:'Elíptica final',s:'1',r:'20 min',t:'cardio',tl:'Cardio',e:'🚴',h:'Cardio de baja intensidad para quemar grasa con el cuerpo ya caliente. Mantén un ritmo constante y moderado.',tip:'Frecuencia cardíaca 120–140 · postura recta · empuja con los brazos también'},
+   ]},
+  {name:'Martes',short:'Mar',focus:'Glúteos, piernas y aductores',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work',f:22,l:'22min'},{c:'ts-cardio',f:8,l:'Cardio'},{c:'ts-ab',f:5,l:'Liga'}],
+   exs:[
+     {n:'Caminadora calentamiento',s:'1',r:'10 min',t:'cardio',tl:'Cardio',e:'🏃',h:'10 minutos a ritmo ligero para activar las piernas antes del entrenamiento.',tip:'Velocidad 4–5 km/h · puedes poner un poco de inclinación'},
+     {n:'A1 · Extensiones de pierna',s:'3',r:'15',t:'multi',tl:'Multi',e:'🦵',h:'Sentada en la máquina, pies bajo el rodillo. Extiende las piernas hasta quedar rectas, baja lento.',tip:'Sube en 2 seg · baja en 3 seg · no bloquees las rodillas'},
+     {n:'A2 · Curl femoral',s:'3',r:'15',t:'super',tl:'Super',e:'🦵',h:'Acostada boca abajo, pies bajo el rodillo. Dobla las rodillas llevando los talones al glúteo, baja lento.',tip:'Caderas pegadas al banco · aprieta el femoral arriba · baja lento'},
+     {n:'B1 · Sentadilla con cable',s:'3',r:'15',t:'multi',tl:'Multi',e:'🏋️',h:'De pie frente a la polea baja, toma el cable. Baja en sentadilla manteniendo la espalda recta, sube empujando con los talones.',tip:'Rodillas hacia los lados · espalda recta · talones en el suelo'},
+     {n:'B2 · Abducción de cadera en polea',s:'3',r:'15 c/l',t:'super',tl:'Super',e:'🙆',h:'De pie junto a la polea, cable en el tobillo de la pierna más lejana. Eleva la pierna hacia afuera sin doblar la rodilla.',tip:'Mantén equilibrio con la otra pierna · movimiento controlado · no balancees'},
+     {n:'Aducción acostada con liga',s:'2',r:'20 c/l',t:'ab',tl:'Liga',e:'🦵',h:'Acostada de lado, liga en el tobillo de la pierna de abajo fija a algo lateral. Levanta la pierna venciendo la resistencia.',tip:'Movimiento lento hacia arriba y abajo · mantén tensión · cambia de lado'},
+     {n:'Sentadilla sumo con liga en rodillas',s:'2',r:'15',t:'ab',tl:'Liga',e:'🏋️',h:'De pie, pies abiertos 45°, liga sobre las rodillas. Baja en sentadilla empujando las rodillas hacia afuera contra la liga.',tip:'Resistir que las rodillas colapsen activa los aductores · espalda recta'},
+     {n:'Elevación de talones de pie',s:'3',r:'20',t:'multi',tl:'Multi',e:'🦵',h:'De pie en la máquina o escalón, sube en puntillas lo más alto posible, baja lento sintiendo el estiramiento.',tip:'Sube alto · mantén 1 seg arriba · baja lento en 3 seg'},
+     {n:'Caminadora inclinada 12%',s:'1',r:'25 min',t:'cardio',tl:'Cardio',e:'⛰️',h:'Caminadora con inclinación alta. Activa glúteos y quema más grasa que correr sin impacto en rodillas.',tip:'Velocidad 4–5 km/h · inclinación 10–12% · no te agarres del pasamanos'},
+   ]},
+  {name:'Miércoles',short:'Mié',focus:'HIIT + oblicuos y core',
+   bars:[{c:'ts-warm',f:3,l:'3min'},{c:'ts-cardio',f:20,l:'HIIT 20min'},{c:'ts-ab',f:12,l:'Abd'},{c:'ts-work',f:5,l:'Liga'}],
+   exs:[
+     {n:'Elíptica calentamiento suave',s:'1',r:'3 min',t:'cardio',tl:'Cardio',e:'🚴',h:'3 minutos suaves para calentar antes del HIIT.',tip:'Ritmo muy ligero · solo para activar'},
+     {n:'HIIT caminadora (2 min normal / 1 min rápido)',s:'1',r:'20 min',t:'cardio',tl:'HIIT',e:'🏃',h:'Alterna 2 minutos a ritmo normal con inclinación y 1 minuto a ritmo rápido. Repite durante 20 minutos.',tip:'Normal: 4.5 km/h · Rápido: 6–7 km/h · inclinación 8–10%'},
+     {n:'Rotación de torso con cable',s:'3',r:'15 c/l',t:'ab',tl:'Abdomen',e:'🔄',h:'De pie, polea a la altura del pecho. Toma el cable con ambas manos y rota el torso sin mover las caderas.',tip:'Caderas fijas · el movimiento viene del abdomen · no uses los brazos'},
+     {n:'Plancha lateral',s:'3',r:'25 seg c/l',t:'ab',tl:'Abdomen',e:'🧘',h:'Apoyo en antebrazo y borde del pie. Cadera elevada en línea recta con el cuerpo, contrae el oblicuo.',tip:'No dejes caer la cadera · respira normal · mira hacia adelante'},
+     {n:'Bicicleta en suelo',s:'3',r:'20 c/l',t:'ab',tl:'Abdomen',e:'🚲',h:'Acostada, manos detrás de la cabeza. Lleva el codo derecho a la rodilla izquierda alternando lento y controlado.',tip:'Movimiento lento · no jales el cuello · extiende bien la pierna que baja'},
+     {n:'Aducción isométrica liga entre rodillas',s:'3',r:'30 seg',t:'ab',tl:'Liga',e:'🦵',h:'Acostada boca arriba, liga entre las rodillas dobladas. Aprieta las rodillas contra la liga con fuerza máxima.',tip:'Apretar con toda la fuerza posible · respirar normal · 15 seg descanso entre series'},
+     {n:'Caminadora inclinada',s:'1',r:'20 min',t:'cardio',tl:'Cardio',e:'⛰️',h:'Cardio final de baja intensidad para continuar quemando grasa.',tip:'Velocidad 4–5 km/h · inclinación 10%'},
+   ]},
+  {name:'Jueves',short:'Jue',focus:'Espalda y bíceps',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work',f:28,l:'28min'},{c:'ts-cardio',f:7,l:'Cardio'}],
+   exs:[
+     {n:'Elíptica calentamiento',s:'1',r:'10 min',t:'cardio',tl:'Cardio',e:'🚴',h:'Calentamiento en elíptica a ritmo ligero.',tip:'Ritmo suave · postura recta · activa también los brazos'},
+     {n:'A1 · Jalón al pecho agarre ancho',s:'3',r:'12',t:'multi',tl:'Multi',e:'🏋️',h:'Sentada bajo la polea, agarre ancho. Tira la barra al pecho llevando los codos hacia abajo y atrás.',tip:'Codos hacia el suelo · pecho arriba · no te balancees · baja lento'},
+     {n:'A2 · Remo sentada en polea',s:'3',r:'12',t:'super',tl:'Super',e:'🚣',h:'Sentada frente a la polea, tira el cable llevando los codos atrás y apretando los omóplatos.',tip:'Espalda recta · codos pegados al cuerpo · aprieta la espalda al final'},
+     {n:'B1 · Pull-over con mancuerna (5 kg)',s:'3',r:'12',t:'multi',tl:'Nuevo',e:'💪',h:'Acostada en el banco, sostener la mancuerna con ambas manos sobre el pecho. Bajar lentamente detrás de la cabeza con codos ligeramente doblados, regresar.',tip:'Sentir el estiramiento del dorsal · bajar lento · no fuerces el rango'},
+     {n:'B2 · Curl de bíceps en polea baja',s:'3',r:'15',t:'super',tl:'Super',e:'💪',h:'De pie frente a la polea baja, codos pegados al cuerpo. Dobla los brazos subiendo las manos hacia los hombros.',tip:'Codos fijos · no balancees el cuerpo · aprieta el bíceps arriba'},
+     {n:'Caminadora inclinada',s:'1',r:'20 min',t:'cardio',tl:'Cardio',e:'⛰️',h:'Cardio final con inclinación moderada.',tip:'Velocidad 4–5 km/h · inclinación 8–10%'},
+   ]},
+  {name:'Viernes',short:'Vie',focus:'Cuerpo completo + quema grasa',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work',f:18,l:'18min'},{c:'ts-ab',f:7,l:'Abd'},{c:'ts-cardio',f:10,l:'HIIT'}],
+   exs:[
+     {n:'Caminadora intervalos (1 min rápido / 2 min normal)',s:'1',r:'20 min',t:'cardio',tl:'HIIT',e:'🏃',h:'Intervalos: 1 minuto rápido seguido de 2 minutos normal. Repite durante 20 minutos.',tip:'Rápido: 6–7 km/h · Normal: 4 km/h · inclinación 8%'},
+     {n:'Press pecho + jalón espalda',s:'3',r:'12 c/u',t:'super',tl:'Super',e:'🏋️',h:'Superserie: press de pecho en máquina seguido inmediatamente de jalón al pecho sin descanso.',tip:'30 seg descanso entre superseries · mantén la técnica aunque estés cansada'},
+     {n:'Curl femoral + extensión pierna',s:'3',r:'15 c/u',t:'super',tl:'Super',e:'🦵',h:'Superserie: curl femoral seguido inmediatamente de extensión de pierna sin descanso.',tip:'Dos máquinas seguidas · no descanses entre ellas · sí descansa entre series'},
+     {n:'Jalón + press hombro',s:'3',r:'12 c/u',t:'super',tl:'Super',e:'💪',h:'Superserie: jalón al pecho seguido de press de hombro en máquina sin descanso.',tip:'30 seg entre superseries · técnica correcta siempre'},
+     {n:'Aducción de pie con liga en tobillo',s:'2',r:'15 c/l',t:'ab',tl:'Liga',e:'🦵',h:'De pie junto a una pared, liga en el tobillo fija a un punto lateral. Cruza la pierna hacia adentro venciendo la liga.',tip:'Pie no toca el suelo durante el set · movimiento lento'},
+     {n:'Crunch inverso en suelo',s:'3',r:'15',t:'ab',tl:'Abdomen',e:'🫄',h:'Acostada boca arriba, eleva las caderas del suelo llevando las rodillas al pecho. Baja lento.',tip:'No uses impulso · contrae el abdomen bajo · baja muy lento'},
+     {n:'Tijeras en suelo',s:'2',r:'20 c/l',t:'ab',tl:'Abdomen',e:'✂️',h:'Acostada, piernas rectas. Alterna subir y bajar cada pierna sin que toquen el suelo.',tip:'Espalda baja pegada al suelo · piernas rectas · movimiento controlado'},
+     {n:'Elíptica HIIT final',s:'1',r:'25 min',t:'cardio',tl:'HIIT',e:'🚴',h:'Elíptica a ritmo moderado-alto para terminar de quemar calorías con el cuerpo ya caliente.',tip:'1 min intenso / 1 min suave · frecuencia cardíaca 130–150'},
+   ]},
+  {name:'Sábado',short:'Sáb',rest:true},
+  {name:'Domingo',short:'Dom',rest:true},
 ];
 
-const AVENAS = [
-  {emoji:'🥣', name:'Avena con plátano, nuez y canela', sub:'Dulce natural · muy saciante',
-   items:['¾ taza avena con leche descremada o de soya','½ plátano en rodajas + 1 cdita miel','Nuez 20g + canela al gusto'], kcal:'~340 kcal', time:'10 min'},
-  {emoji:'🥣', name:'Avena con mango y chía', sub:'Tropical y refrescante',
-   items:['¾ taza avena + 1 cdita chía hidratada','½ mango en cubos + limón + tajín opcional','Almendras 15g encima'], kcal:'~340 kcal', time:'10 min'},
-  {emoji:'🥣', name:'Overnight oats con fresas', sub:'Prep la noche anterior · 0 min en la mañana',
-   items:['¾ taza avena + leche de soya + chía (noche antes)','Fresas frescas en trozos al servir','1 cdita miel + almendras 15g'], kcal:'~330 kcal', time:'0 min'},
-  {emoji:'🥣', name:'Avena con papaya y miel', sub:'Digestiva y ligera',
-   items:['¾ taza avena con leche descremada','Papaya en cubos ½ taza + 1 cdita miel','Almendras 15g + canela'], kcal:'~335 kcal', time:'10 min'},
-  {emoji:'🥣', name:'Avena con uvas y miel de abeja', sub:'Dulce, diferente y muy rico',
-   items:['¾ taza avena con leche de almendra','Uvas partidas a la mitad 80g + 1 cdita miel','Nuez 15g + canela'], kcal:'~340 kcal', time:'10 min'},
-  {emoji:'🥣', name:'Avena con pera y almendras', sub:'Suave, cremosa y saciante',
-   items:['¾ taza avena + leche descremada','½ pera en rodajas + 1 cdita miel','Almendras 20g + canela y vainilla'], kcal:'~335 kcal', time:'10 min'},
+// ═══════════════════════════════════════
+// DATA — MANOLO
+// ═══════════════════════════════════════
+const MANOLO_DAYS = [
+  {name:'Lunes',short:'Lun',focus:'Pecho y tríceps — adaptado clavícula',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work-blue',f:35,l:'35min'},{c:'ts-ab',f:8,l:'Abd'},{c:'ts-cardio',f:12,l:'Cardio'}],
+   exs:[
+     {n:'Caminadora calentamiento',s:'1',r:'5 min',t:'cardio',tl:'Cardio',e:'🏃',h:'5 minutos a ritmo ligero para calentar articulaciones.',tip:'Velocidad 4–5 km/h'},
+     {n:'A1 · Press de pecho en máquina (rango bajo-medio)',s:'4',r:'12',t:'multi',tl:'Multi',e:'🏋️',h:'Press en máquina con rango de movimiento bajo-medio. El brazo izquierdo solo llega hasta donde no duela en la clavícula.',tip:'🦴 Brazo izq: rango parcial · espalda pegada · empuja parejo con ambos brazos'},
+     {n:'A2 · Aperturas con polea baja',s:'4',r:'12',t:'super-blue',tl:'Super',e:'🤸',h:'Parado frente a la polea baja, abre los brazos hacia arriba formando una V. Rango parcial en brazo izquierdo.',tip:'🦴 Codos ligeramente doblados · no subas los brazos más allá del hombro izq'},
+     {n:'B1 · Extensiones tríceps polea',s:'3',r:'15',t:'multi',tl:'Multi',e:'💪',h:'De pie frente a la polea alta, codos pegados al cuerpo. Extiende hacia abajo apretando el tríceps.',tip:'Codos fijos · no los separes del cuerpo · aprieta abajo 1 seg'},
+     {n:'B2 · Fondos de tríceps asistidos',s:'3',r:'12',t:'super-blue',tl:'Super',e:'💪',h:'En la máquina de fondos asistida, baja el cuerpo doblando los codos. Sube empujando con los tríceps.',tip:'🦴 Codos hacia atrás · no hacia afuera · rango cómodo para la clavícula'},
+     {n:'Crunch en máquina',s:'3',r:'20',t:'ab',tl:'Abdomen',e:'🫄',h:'Flexiona el torso hacia adelante contrayendo el abdomen. Regresa lento sin soltar completamente.',tip:'No uses impulso · exhala al flexionar · 1 seg en tensión'},
+     {n:'Plancha frontal',s:'3',r:'35 seg',t:'ab',tl:'Abdomen',e:'🧘',h:'Antebrazos y puntas de los pies. Cuerpo recto, contrae abdomen y glúteos.',tip:'No dejes caer las caderas · respira normal'},
+     {n:'Elíptica ritmo moderado-alto',s:'1',r:'12 min',t:'cardio',tl:'Cardio',e:'🚴',h:'Cardio final para maximizar quema de calorías.',tip:'Frecuencia cardíaca 130–145'},
+   ]},
+  {name:'Martes',short:'Mar',focus:'Espalda y bíceps',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work-blue',f:38,l:'38min'},{c:'ts-cardio',f:17,l:'Cardio'}],
+   exs:[
+     {n:'Elíptica calentamiento',s:'1',r:'5 min',t:'cardio',tl:'Cardio',e:'🚴',h:'5 minutos suaves en elíptica.',tip:'Ritmo muy ligero'},
+     {n:'A1 · Jalón al pecho agarre ancho',s:'4',r:'12',t:'multi',tl:'Multi',e:'🏋️',h:'Sentado bajo la polea, agarre ancho. Tira la barra al pecho llevando los codos HACIA ABAJO, no atrás.',tip:'✅ Seguro para clavícula · codos hacia el suelo · pecho hacia adelante'},
+     {n:'A2 · Remo sentada en polea',s:'4',r:'12',t:'super-blue',tl:'Super',e:'🚣',h:'Sentado frente a la polea, tira el cable llevando los codos atrás y apretando los omóplatos.',tip:'✅ Seguro · espalda recta · aprieta al final'},
+     {n:'B1 · Curl de bíceps en polea baja',s:'3',r:'15',t:'multi',tl:'Multi',e:'💪',h:'De pie, toma la polea baja con agarre supino. Dobla los brazos subiendo hacia los hombros.',tip:'Codos pegados al cuerpo · no balancees · aprieta arriba'},
+     {n:'B2 · Curl martillo con mancuernas',s:'3',r:'12',t:'super-blue',tl:'Super',e:'💪',h:'De pie con mancuernas, agarre neutro (pulgares arriba). Dobla los brazos como el curl normal.',tip:'Trabaja también el braquial · codos fijos · 5–10 kg'},
+     {n:'HIIT caminadora (2 min normal / 1 min rápido)',s:'1',r:'17 min',t:'cardio',tl:'HIIT',e:'🏃',h:'Intervalos en caminadora. 2 minutos a ritmo normal, 1 minuto rápido. Repetir.',tip:'Normal: 4.5 km/h · Rápido: 6.5 km/h · inclinación 8%'},
+   ]},
+  {name:'Miércoles',short:'Mié',focus:'Piernas y cardio HIIT + core',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work-blue',f:28,l:'28min'},{c:'ts-cardio',f:20,l:'HIIT'},{c:'ts-ab',f:7,l:'Core'}],
+   exs:[
+     {n:'Caminadora calentamiento',s:'1',r:'5 min',t:'cardio',tl:'Cardio',e:'🏃',h:'Calentamiento ligero.',tip:'Velocidad 4 km/h'},
+     {n:'A1 · Extensiones de pierna',s:'4',r:'15',t:'multi',tl:'Multi',e:'🦵',h:'Máquina de extensiones. Extiende las piernas hasta quedar rectas, baja lento.',tip:'No bloquees rodillas · baja en 3 seg · aprieta el cuádriceps arriba'},
+     {n:'A2 · Curl femoral',s:'4',r:'15',t:'super-blue',tl:'Super',e:'🦵',h:'Acostado boca abajo, dobla las rodillas llevando los talones al glúteo. Baja lento.',tip:'Caderas pegadas · aprieta el femoral · baja lento'},
+     {n:'B1 · Sentadilla con cable',s:'4',r:'15',t:'multi',tl:'Multi',e:'🏋️',h:'De pie sosteniendo el cable. Baja en sentadilla profunda con espalda recta, sube empujando con los talones.',tip:'✅ Sin carga en la clavícula · rodillas hacia afuera · espalda recta'},
+     {n:'B2 · Elevación de talones',s:'4',r:'20',t:'super-blue',tl:'Super',e:'🦵',h:'De pie, sube en puntillas lo más alto posible. Baja lento sintiendo el estiramiento de la pantorrilla.',tip:'Sube alto · 1 seg arriba · baja muy lento en 3 seg'},
+     {n:'HIIT elíptica (1 min intenso / 1 min suave)',s:'1',r:'20 min',t:'cardio',tl:'HIIT',e:'🚴',h:'Intervalos en elíptica. 1 minuto a máxima intensidad, 1 minuto suave. Repetir.',tip:'Intenso: nivel 12–14 · Suave: nivel 5–6'},
+     {n:'Rotación de torso con cable',s:'3',r:'15 c/l',t:'ab',tl:'Core',e:'🔄',h:'De pie, polea al pecho. Rota el torso sin mover las caderas.',tip:'✅ Sin compromiso de clavícula · caderas fijas'},
+     {n:'Bicicleta en suelo',s:'3',r:'20 c/l',t:'ab',tl:'Core',e:'🚲',h:'Acostado, manos detrás de la cabeza. Alterna codo al talón contrario.',tip:'Movimiento lento · no jales el cuello · extiende bien la pierna'},
+   ]},
+  {name:'Jueves',short:'Jue',focus:'Hombros — adaptado clavícula',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work-blue',f:35,l:'35min'},{c:'ts-ab',f:8,l:'Abd'},{c:'ts-cardio',f:12,l:'Cardio'}],
+   exs:[
+     {n:'Elíptica calentamiento suave',s:'1',r:'5 min',t:'cardio',tl:'Cardio',e:'🚴',h:'Calentamiento muy suave antes del día de hombros.',tip:'Nivel 4–5 · muy ligero'},
+     {n:'A1 · Elevaciones laterales con mancuerna (hasta altura hombro)',s:'4',r:'15',t:'multi',tl:'Multi',e:'🙆',h:'De pie, mancuernas a los lados. Eleva los brazos hasta la altura del hombro — NO MÁS. Baja lento.',tip:'🦴 Brazo izq: máximo hasta el hombro · 3–5 kg · codos ligeramente doblados'},
+     {n:'A2 · Elevaciones frontales hasta 90°',s:'4',r:'12',t:'super-blue',tl:'Super',e:'🙋',h:'De pie, mancuernas al frente. Eleva los brazos hacia adelante hasta 90° (paralelo al suelo). Baja lento.',tip:'🦴 90° máximo · brazo izq con menos peso si es necesario'},
+     {n:'B1 · Vuelos posteriores en polea (cabeza baja)',s:'3',r:'15',t:'multi',tl:'Multi',e:'🦅',h:'Inclinado hacia adelante, toma la polea cruzada. Abre los brazos hacia atrás trabajando el deltoides posterior.',tip:'✅ Seguro para clavícula · movimiento hacia atrás, no arriba'},
+     {n:'B2 · Press Arnold con mancuernas (rango parcial izq.)',s:'3',r:'10',t:'super-blue',tl:'Super',e:'💪',h:'Sentado, mancuernas al frente a la altura del hombro. Gira y empuja hacia arriba. Brazo izquierdo solo hasta donde no duela.',tip:'🦴 Izq: rango parcial · 5 kg · derecho normal'},
+     {n:'Crunch inverso en suelo',s:'3',r:'15',t:'ab',tl:'Abdomen',e:'🫄',h:'Acostado boca arriba, eleva las caderas llevando las rodillas al pecho. Baja lento.',tip:'Sin impulso · contrae el abdomen bajo · baja muy lento'},
+     {n:'Tijeras en suelo',s:'3',r:'20 c/l',t:'ab',tl:'Abdomen',e:'✂️',h:'Acostado, piernas rectas. Alterna subir y bajar cada pierna sin que toquen el suelo.',tip:'Espalda baja pegada al suelo · piernas rectas'},
+     {n:'Caminadora inclinada 10%',s:'1',r:'12 min',t:'cardio',tl:'Cardio',e:'⛰️',h:'Cardio final con inclinación para activar glúteos y quemar grasa.',tip:'Velocidad 4.5 km/h · inclinación 10%'},
+   ]},
+  {name:'Viernes',short:'Vie',focus:'Cuerpo completo + quema grasa máxima',
+   bars:[{c:'ts-warm',f:5,l:'5min'},{c:'ts-work-blue',f:25,l:'25min'},{c:'ts-ab',f:8,l:'Abd'},{c:'ts-cardio',f:22,l:'HIIT'}],
+   exs:[
+     {n:'Caminadora calentamiento',s:'1',r:'5 min',t:'cardio',tl:'Cardio',e:'🏃',h:'Calentamiento suave.',tip:'Velocidad 4 km/h'},
+     {n:'Press pecho + jalón espalda',s:'4',r:'12 c/u',t:'super-blue',tl:'Super',e:'🏋️',h:'Superserie: press de pecho en máquina (rango bajo-medio) seguido de jalón al pecho sin descanso.',tip:'🦴 Press: rango bajo-medio en brazo izq · 30 seg descanso entre superseries'},
+     {n:'Sentadilla + curl femoral',s:'4',r:'15 c/u',t:'super-blue',tl:'Super',e:'🦵',h:'Superserie: sentadilla con cable seguida de curl femoral en máquina sin descanso.',tip:'✅ Sin compromiso de clavícula · mantén técnica aunque estés cansado'},
+     {n:'Curl bíceps + extensión tríceps',s:'3',r:'12 c/u',t:'super-blue',tl:'Super',e:'💪',h:'Superserie: curl de bíceps en polea seguido de extensión de tríceps sin descanso.',tip:'Codos fijos · muñecas rectas · 30 seg entre superseries'},
+     {n:'Rotación de torso con cable',s:'3',r:'15 c/l',t:'ab',tl:'Core',e:'🔄',h:'Rotación de torso con polea a la altura del pecho.',tip:'✅ Sin compromiso de clavícula · caderas fijas'},
+     {n:'Bicicleta en suelo',s:'3',r:'20 c/l',t:'ab',tl:'Core',e:'🚲',h:'Acostado alternando codo al talón contrario.',tip:'Lento y controlado · no jales el cuello'},
+     {n:'HIIT elíptica (1 min máximo / 1 min suave)',s:'1',r:'22 min',t:'cardio',tl:'HIIT',e:'🚴',h:'HIIT en elíptica para máxima quema de calorías al final de la semana.',tip:'Máximo: nivel 14–16 · Suave: nivel 5 · frecuencia cardíaca 140–160'},
+   ]},
+  {name:'Sábado',short:'Sáb',rest:true},
+  {name:'Domingo',short:'Dom',rest:true},
 ];
 
-const PROTEINAS = [
-  {emoji:'🍳', name:'Huevos a la mexicana', sub:'Clásico infalible',
-   items:['3 huevos revueltos con jitomate, cebolla y chile serrano','2 tortillas de maíz + frijoles negros ½ taza'], kcal:'+450 kcal', prot:'38g', time:'10 min'},
-  {emoji:'🥚', name:'Omelette de espinacas y queso', sub:'Ligero y proteico',
-   items:['4 claras + 1 huevo, omelette con espinacas y queso fresco','½ taza frijoles + 1 tortilla integral'], kcal:'+430 kcal', prot:'42g', time:'10 min'},
-  {emoji:'🍳', name:'Huevos divorciados', sub:'Festivo y muy sabroso',
-   items:['2 huevos: uno con salsa roja, otro con salsa verde','2 tortillas de maíz + frijoles refritos light ½ taza'], kcal:'+440 kcal', prot:'36g', time:'10 min'},
-  {emoji:'🐟', name:'Tostadas de atún con aguacate', sub:'Rápido y llena mucho',
-   items:['1 lata atún con limón, cebolla morada y cilantro','2 tostadas horneadas + aguacate ¼ + chile'], kcal:'+440 kcal', prot:'42g', time:'5 min'},
-  {emoji:'🍗', name:'Tacos de pollo con salsa verde', sub:'Sabroso y bien mexicano',
-   items:['150g pollo deshebrado con ajo, comino y chile','3 tortillas de maíz + salsa verde + cilantro'], kcal:'+450 kcal', prot:'46g', time:'15 min'},
-  {emoji:'🥩', name:'Bistec con huevo estrellado', sub:'Contundente y clásico',
-   items:['150g bistec de res magro a la plancha','1 huevo estrellado encima + 2 tortillas + salsa roja'], kcal:'+460 kcal', prot:'48g', time:'15 min'},
+// ═══════════════════════════════════════
+// DATA — MENUS LAURA
+// ═══════════════════════════════════════
+const LAURA_AVENAS=[
+  {e:'🥣',n:'Avena con plátano, nuez y canela',s:'Dulce natural · muy saciante',i:['¾ taza avena con leche descremada','½ plátano en rodajas + 1 cdita miel','Nuez 20g + canela'],k:'~340 kcal',t:'10 min'},
+  {e:'🥣',n:'Avena con mango y chía',s:'Tropical y refrescante',i:['¾ taza avena + 1 cdita chía hidratada','½ mango en cubos + limón + tajín','Almendras 15g'],k:'~340 kcal',t:'10 min'},
+  {e:'🥣',n:'Overnight oats con fresas',s:'Prep noche anterior · 0 min',i:['¾ taza avena + leche de soya + chía (noche antes)','Fresas frescas al servir','1 cdita miel + almendras 15g'],k:'~330 kcal',t:'0 min'},
+  {e:'🥣',n:'Avena con papaya y miel',s:'Digestiva y ligera',i:['¾ taza avena con leche descremada','Papaya en cubos ½ taza + 1 cdita miel','Almendras 15g + canela'],k:'~335 kcal',t:'10 min'},
+  {e:'🥣',n:'Avena con uvas y miel de abeja',s:'Dulce y diferente',i:['¾ taza avena con leche de almendra','Uvas partidas 80g + 1 cdita miel','Nuez 15g + canela'],k:'~340 kcal',t:'10 min'},
+  {e:'🥣',n:'Avena con pera y almendras',s:'Suave y cremosa',i:['¾ taza avena + leche descremada','½ pera en rodajas + 1 cdita miel','Almendras 20g + canela y vainilla'],k:'~335 kcal',t:'10 min'},
+];
+const LAURA_PROTEINAS=[
+  {e:'🍳',n:'Huevos a la mexicana',s:'Clásico infalible',i:['3 huevos con jitomate, cebolla y chile serrano','2 tortillas de maíz + frijoles negros ½ taza'],k:'+450 kcal',p:'38g',t:'10 min'},
+  {e:'🥚',n:'Omelette de espinacas y queso',s:'Ligero y proteico',i:['4 claras + 1 huevo con espinacas y queso fresco','½ taza frijoles + 1 tortilla integral'],k:'+430 kcal',p:'42g',t:'10 min'},
+  {e:'🍳',n:'Huevos divorciados',s:'Festivo y muy sabroso',i:['2 huevos: uno con salsa roja, otro con verde','2 tortillas + frijoles refritos light ½ taza'],k:'+440 kcal',p:'36g',t:'10 min'},
+  {e:'🐟',n:'Tostadas de atún con aguacate',s:'Rápido y llena mucho',i:['1 lata atún con limón, cebolla morada y cilantro','2 tostadas horneadas + aguacate ¼ + chile'],k:'+440 kcal',p:'42g',t:'5 min'},
+  {e:'🍗',n:'Tacos de pollo con salsa verde',s:'Sabroso y bien mexicano',i:['150g pollo deshebrado con ajo, comino y chile','3 tortillas de maíz + salsa verde + cilantro'],k:'+450 kcal',p:'46g',t:'15 min'},
+  {e:'🥩',n:'Bistec con huevo estrellado',s:'Contundente y clásico',i:['150g bistec de res magro a la plancha','1 huevo estrellado + 2 tortillas + salsa roja'],k:'+460 kcal',p:'48g',t:'15 min'},
+];
+const LAURA_COMIDAS=[
+  {e:'🍗',n:'Pollo al chipotle con brócoli',s:'Ahumado y muy sabroso',i:['180g pechuga marinada en chipotle','Brócoli al vapor con ajo y limón','½ taza arroz integral + ejotes'],k:'~770 kcal',p:'55g',t:'25 min'},
+  {e:'🥗',n:'Bowl de pollo con verduras asadas',s:'Colorido y llenador',i:['180g pollo en tiras con paprika y comino','Pimiento, calabacita y cebolla asados','½ taza quinoa + aceite de oliva'],k:'~780 kcal',p:'55g',t:'25 min'},
+  {e:'🌮',n:'Tacos de pollo con nopales y guacamole',s:'100% mexicano',i:['180g pollo con orégano y ajo','Nopales asados con chile y cebolla','3 tortillas + guacamole (½ aguacate)'],k:'~780 kcal',p:'52g',t:'20 min'},
+  {e:'🐟',n:'Salmón con espinacas y quinoa',s:'Elegante y rápido',i:['180g salmón con eneldo y limón','Espinacas salteadas con ajo','½ taza quinoa + jitomate cherry'],k:'~770 kcal',p:'55g',t:'20 min'},
+  {e:'🐟',n:'Tostadas de atún con pico de gallo',s:'Fresco y muy sabroso',i:['2 latas atún con limón y chile','3 tostadas + aguacate ½','Pico de gallo: jitomate, cebolla, cilantro'],k:'~780 kcal',p:'60g',t:'8 min'},
+  {e:'🥩',n:'Arrachera con nopales y frijoles',s:'Sabor a parrilla',i:['180g arrachera con limón, ajo y comino','Nopales asados con cebolla','½ taza frijoles + 2 tortillas'],k:'~790 kcal',p:'58g',t:'20 min'},
+  {e:'🥩',n:'Bistec en salsa roja con calabacita',s:'Caldoso y mexicano',i:['180g bistec en salsa de jitomate con chile','Calabacita y ejotes en la salsa','2 tortillas + arroz integral ½ taza'],k:'~800 kcal',p:'55g',t:'25 min'},
+  {e:'🥚',n:'Omelette relleno de verduras y atún',s:'Rápido y proteico',i:['4 claras + 2 huevos, omelette grande','Espinacas, pimiento, atún, queso fresco','½ taza frijoles + ensalada de jitomate'],k:'~760 kcal',p:'60g',t:'12 min'},
+  {e:'🍳',n:'Huevos en salsa verde con brócoli',s:'Bien mexicano',i:['3 huevos en salsa verde de tomatillo','Brócoli al vapor con limón','2 tortillas + frijoles ½ taza'],k:'~770 kcal',p:'52g',t:'15 min'},
 ];
 
-const COMIDAS = [
-  {emoji:'🍗', name:'Pollo al chipotle con brócoli', sub:'Ahumado, picante y muy sabroso',
-   items:['180g pechuga marinada en chipotle a la plancha','Brócoli al vapor con ajo y limón','½ taza arroz integral + ejotes salteados'], kcal:'~770 kcal', prot:'55g', time:'25 min'},
-  {emoji:'🥗', name:'Bowl de pollo con verduras asadas', sub:'Colorido y muy llenador',
-   items:['180g pollo en tiras con paprika y comino','Pimiento rojo/amarillo, calabacita y cebolla asados','½ taza quinoa + aceite de oliva + limón'], kcal:'~780 kcal', prot:'55g', time:'25 min'},
-  {emoji:'🌮', name:'Tacos de pollo con nopales y guacamole', sub:'100% mexicano y delicioso',
-   items:['180g pollo en tiras con orégano y ajo','Nopales asados con chile y cebolla','3 tortillas + guacamole casero (½ aguacate)'], kcal:'~780 kcal', prot:'52g', time:'20 min'},
-  {emoji:'🍗', name:'Pollo al horno con verduras y frijoles', sub:'Simple, limpio y saciante',
-   items:['200g pechuga horneada con hierbas de olor','Brócoli y zanahoria al vapor con limón','½ taza frijoles negros'], kcal:'~760 kcal', prot:'58g', time:'25 min'},
-  {emoji:'🐟', name:'Salmón con espinacas y quinoa', sub:'Elegante y listo en 20 min',
-   items:['180g salmón a la plancha con eneldo y limón','Espinacas salteadas con ajo y aceite de oliva','½ taza quinoa + jitomate cherry'], kcal:'~770 kcal', prot:'55g', time:'20 min'},
-  {emoji:'🐟', name:'Bowl de salmón estilo asiático', sub:'Sabor diferente y muy rico',
-   items:['160g salmón con jengibre, soya light y ajo','Brócoli y zanahoria salteados','½ taza arroz integral + ajonjolí tostado'], kcal:'~770 kcal', prot:'52g', time:'20 min'},
-  {emoji:'🐟', name:'Tostadas de atún con pico de gallo', sub:'Fresco, rápido y muy sabroso',
-   items:['2 latas atún con limón, cilantro y chile','3 tostadas horneadas + aguacate ½ untado','Pico de gallo: jitomate, cebolla, cilantro, limón'], kcal:'~780 kcal', prot:'60g', time:'8 min'},
-  {emoji:'🐟', name:'Salmón horneado con calabacita asada', sub:'Reconfortante y completo',
-   items:['180g salmón horneado con paprika, ajo y limón','Calabacita y pimiento asados al horno','½ taza frijoles + 1 tortilla de maíz'], kcal:'~775 kcal', prot:'55g', time:'25 min'},
-  {emoji:'🥩', name:'Arrachera con nopales asados y frijoles', sub:'Sabor a parrilla en casa',
-   items:['180g arrachera marinada con limón, ajo y comino','Nopales asados con cebolla y chile de agua','½ taza frijoles + 2 tortillas de maíz'], kcal:'~790 kcal', prot:'58g', time:'20 min'},
-  {emoji:'🥩', name:'Bistec en salsa roja con calabacita', sub:'Caldoso, mexicano y reconfortante',
-   items:['180g bistec en salsa de jitomate con chile y ajo','Calabacita y ejotes cocidos en la salsa','2 tortillas + arroz integral ½ taza'], kcal:'~800 kcal', prot:'55g', time:'25 min'},
-  {emoji:'🥩', name:'Milanesa sin empanizar con ensalada', sub:'Ligera, crujiente y saciante',
-   items:['180g milanesa de res sin empanizar a la plancha','Espinacas, jitomate cherry, pepino, nuez','½ taza quinoa + aceite oliva y vinagre balsámico'], kcal:'~780 kcal', prot:'55g', time:'20 min'},
-  {emoji:'🥚', name:'Omelette relleno de verduras y atún', sub:'Rápido, proteico y llenador',
-   items:['4 claras + 2 huevos, omelette grande','Espinacas, pimiento, atún, queso fresco 30g','½ taza frijoles + ensalada de jitomate'], kcal:'~760 kcal', prot:'60g', time:'12 min'},
-  {emoji:'🍳', name:'Huevos en salsa verde con brócoli', sub:'Suculento y bien mexicano',
-   items:['3 huevos tibios en salsa verde de tomatillo','Brócoli al vapor con limón','2 tortillas de maíz + frijoles ½ taza'], kcal:'~770 kcal', prot:'52g', time:'15 min'},
-  {emoji:'🥚', name:'Ensalada de huevo con salmón y verduras', sub:'Fresco, casi sin cocinar',
-   items:['2 huevos duros + 150g salmón o 1 lata atún','Espinacas, jitomate cherry, pepino, zanahoria','Aguacate ¼ + aceite de oliva + limón + sal'], kcal:'~760 kcal', prot:'55g', time:'10 min'},
+// SHOP DATA
+const LAURA_SHOP=[
+  {t:'🥩 Proteínas',i:['Pechugas de pollo (1 kg)','Bistec de res magro (500g)','Arrachera magra (400g)','Filetes de salmón (500g)','Atún en agua (5–6 latas)','Huevos (1.5 docenas)','Milanesa sin empanizar']},
+  {t:'🥣 Desayuno',i:['Avena en hojuelas','Chía (bolsita)','Nuez picada','Almendras','Miel de abeja','Canela molida','Leche descremada o de soya']},
+  {t:'🍓 Frutas',i:['Mango (3–4 piezas)','Plátano (1 racimo)','Fresas (500g)','Papaya (1 mediana)','Melón (1 pieza)','Manzana (3–4 piezas)','Uvas (racimo)','Pera (3 piezas)']},
+  {t:'🥦 Verduras',i:['Espinacas (bolsa)','Brócoli','Calabacita','Nopales','Jitomate y jitomate cherry','Pepino','Zanahoria','Pimiento rojo y amarillo','Ejotes','Tomatillo']},
+  {t:'🌾 Carbohidratos',i:['Arroz integral','Quinoa','Tortillas de maíz','Tostadas horneadas','Frijoles negros (lata x2)']},
+  {t:'🥑 Extras',i:['Aguacate (3–4 piezas)','Aceite de oliva','Queso fresco','Limones (bolsa)','Ajo y cebolla','Cilantro y epazote','Chile serrano y chipotle','Paprika, comino, orégano','Tajín','Ajonjolí tostado','Vinagre balsámico']},
+];
+const MANOLO_SHOP=[
+  {t:'🥩 Proteínas',i:['Pechugas de pollo (1.5 kg)','Bistec de res magro (600g)','Arrachera magra (400g)','Filetes de salmón (500g)','Atún en agua (6–8 latas)','Huevos (2 docenas)','Pechuga de pavo (400g)']},
+  {t:'🌾 Carbohidratos',i:['Arroz integral','Quinoa','Tortillas de maíz','Frijoles negros (lata x3)','Avena (opcional desayuno)','Plátanos (racimo)']},
+  {t:'🥦 Verduras',i:['Brócoli (2 cabezas)','Calabacita (6 piezas)','Nopales (5–6 pencas)','Espinacas (bolsa)','Jitomate y jitomate cherry','Pepino','Zanahoria','Lechuga','Ejotes','Cebolla']},
+  {t:'🥑 Extras',i:['Almendras (bolsita)','Aceite de oliva','Limones (bolsa grande)','Ajo y cebolla','Chile y salsa','Paprika, comino, orégano','Vinagre balsámico','Soya light']},
 ];
 
-const SHOP = [
-  {title:'🥩 Proteínas', items:['Pechugas de pollo (1 kg)','Bistec de res magro (500g)','Arrachera magra (400g)','Filetes de salmón (500g)','Atún en agua (5–6 latas)','Huevos (1.5 docenas)','Milanesa sin empanizar (400g)']},
-  {title:'🥣 Desayuno', items:['Avena en hojuelas','Chía (bolsita)','Nuez picada','Almendras','Miel de abeja','Canela molida','Leche descremada o de soya']},
-  {title:'🍓 Frutas', items:['Mango (3–4 piezas)','Plátano (1 racimo)','Fresas (500g)','Papaya (1 mediana)','Melón (1 pieza)','Manzana (3–4 piezas)','Uvas (racimo)','Pera (3 piezas)']},
-  {title:'🥦 Verduras', items:['Espinacas (bolsa)','Brócoli (1 cabeza)','Calabacita (4 piezas)','Nopales (4–5 pencas)','Jitomate y jitomate cherry','Pepino (3 piezas)','Zanahoria (500g)','Pimiento rojo y amarillo','Ejotes (250g)','Tomatillo (salsa verde)']},
-  {title:'🌾 Carbohidratos', items:['Arroz integral','Quinoa','Tortillas de maíz','Tostadas horneadas','Frijoles negros (lata x2)']},
-  {title:'🥑 Extras y condimentos', items:['Aguacate (3–4 piezas)','Aceite de oliva','Queso fresco bajo en grasa','Limones (bolsa grande)','Ajo y cebolla','Cilantro y epazote','Chile serrano y chipotle','Paprika, comino, orégano','Tajín y chile piquín','Jengibre y soya light','Ajonjolí tostado','Vinagre balsámico']},
-];
+// ═══════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════
+let lauraDay=0, manoloDay=0;
 
-// ─── RENDER HELPERS ───
-
-function mealCardHTML(m, showProt = false) {
-  const footer = `<span class="mpill mp-kcal">${m.kcal}</span>${showProt||m.prot?`<span class="mpill mp-prot">${m.prot||''} prot</span>`:''}${m.time?`<span class="mpill mp-time">⏱ ${m.time}</span>`:''}`;
-  return `<div class="meal-card">
-    <div class="meal-header-bar">
-      <span class="meal-header-title">${m.emoji} ${m.name}</span>
-    </div>
-    <div class="meal-body">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-style:italic">${m.sub}</div>
-      <div class="meal-items">${m.items.map(i=>`<span>${i}</span>`).join('')}</div>
-    </div>
-    <div class="meal-footer">${footer}</div>
-  </div>`;
-}
-
-function renderMenu() {
-  document.getElementById('avenas-list').innerHTML = AVENAS.map(m=>mealCardHTML(m)).join('');
-  document.getElementById('proteinas-list').innerHTML = PROTEINAS.map(m=>mealCardHTML(m,true)).join('');
-  document.getElementById('comidas-list').innerHTML = COMIDAS.map(m=>mealCardHTML(m,true)).join('');
-}
-
-function renderShop() {
-  const saved = JSON.parse(localStorage.getItem('shopChecked')||'{}');
-  document.getElementById('shop-list').innerHTML = SHOP.map(group=>`
-    <div class="shop-group">
-      <div class="shop-group-title">${group.title}</div>
-      <div class="shop-items-wrap">
-        ${group.items.map(item=>{
-          const key = group.title+item;
-          const checked = saved[key]||false;
-          return `<div class="shop-item${checked?' checked':''}" onclick="toggleShop(this,'${group.title+item}')">
-            <div class="shop-checkbox">${checked?'✓':''}</div>
-            <span class="shop-name">${item}</span>
-          </div>`;
-        }).join('')}
+function buildExList(exs, plan) {
+  const color = plan==='laura'?'green':'blue';
+  const superTag = plan==='laura'?'super':'super-blue';
+  return exs.map((e,i)=>{
+    const dotColor = e.t==='cardio'?'purple':e.t==='ab'?'amber':color;
+    return `<div class="ex-item">
+      <div class="ex-row" onclick="toggleEx('${plan}-ex-${i}',this)">
+        <div class="ex-dot ${dotColor}"></div>
+        <span class="ex-name">${e.n}</span>
+        <span class="ex-meta">${e.s}×${e.r}</span>
+        <span class="ex-tag ${e.t}">${e.tl}</span>
+        <span class="ex-chevron" id="${plan}-chev-${i}">▼</span>
       </div>
-    </div>
-  `).join('');
+      <div class="ex-expand" id="${plan}-ex-${i}">
+        <div class="ex-img-wrap">
+          <div class="ex-img">${e.e}</div>
+          <div class="ex-img-title">${e.n.replace(/^[A-Z]\d · /,'')}</div>
+          <div class="ex-img-desc">${e.h}</div>
+        </div>
+        <div class="${plan==='laura'?'ex-tips':'ex-tips-blue'}">💡 ${e.tip}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function toggleShop(el, key) {
-  const checked = !el.classList.contains('checked');
-  el.classList.toggle('checked', checked);
-  const cb = el.querySelector('.shop-checkbox');
-  cb.textContent = checked ? '✓' : '';
-  const saved = JSON.parse(localStorage.getItem('shopChecked')||'{}');
-  saved[key] = checked;
-  localStorage.setItem('shopChecked', JSON.stringify(saved));
+function toggleEx(id, row) {
+  const el = document.getElementById(id);
+  const plan = id.split('-ex-')[0];
+  const idx = id.split('-ex-')[1];
+  const chev = document.getElementById(`${plan}-chev-${idx}`);
+  const isOpen = el.classList.contains('open');
+  el.classList.toggle('open',!isOpen);
+  chev.classList.toggle('open',!isOpen);
 }
 
-// ─── RUTINA ───
-
-let activeDay = 0;
-function renderDayPills() {
-  const wrap = document.getElementById('day-pills');
-  wrap.innerHTML = DAYS.map((d,i)=>`
-    <div class="day-pill${i===activeDay?' active':''}" onclick="selectDay(${i})">${d.short}</div>
-  `).join('');
-}
-
-function selectDay(i) {
-  activeDay = i;
-  renderDayPills();
-  renderWorkout();
-}
-
-function renderWorkout() {
-  const d = DAYS[activeDay];
-  const wrap = document.getElementById('workout-content');
-  if (d.rest) {
-    wrap.innerHTML = `<div class="rest-card">
+function renderWorkout(plan, idx) {
+  const days = plan==='laura'?LAURA_DAYS:MANOLO_DAYS;
+  const d = days[idx];
+  const wrap = document.getElementById(`${plan}-workout-content`);
+  if(d.rest){
+    wrap.innerHTML=`<div class="rest-card ${plan==='manolo'?'blue':''}">
       <div class="rest-emoji">${d.name==='Sábado'?'🧘':'😴'}</div>
       <div class="rest-title">${d.name==='Sábado'?'Descanso activo':'Descanso completo'}</div>
-      <div class="rest-sub">${d.name==='Sábado'?'Caminata ligera 20–30 min o stretching suave':'El cuerpo repara músculo y quema grasa durante el reposo'}</div>
-    </div>`; return;
+      <div class="rest-sub">${d.name==='Sábado'?'Caminata 20–30 min o stretching suave':'El cuerpo repara músculo y quema grasa'}</div>
+    </div>`;return;
   }
-  const tbSegs = d.timeBar.map(s=>`<div class="time-seg ${s.cls}" style="flex:${s.flex}">${s.label}</div>`).join('');
-  const exRows = d.exercises.map(e=>`
-    <div class="ex-row">
-      <div class="ex-dot ${e.tag==='cardio'?'blue':e.tag==='liga'?'amber':'green'}"></div>
-      <span class="ex-name">${e.name}</span>
-      <span class="ex-meta">${e.sets}×${e.reps}</span>
-      <span class="ex-tag ${e.tag}">${e.tagLabel}</span>
-    </div>`).join('');
-  wrap.innerHTML = `<div class="workout-card">
+  const bars = d.bars.map(b=>`<div class="ts ${b.c}" style="flex:${b.f}">${b.l}</div>`).join('');
+  wrap.innerHTML=`<div class="workout-card">
     <div class="workout-header">
-      <div><div class="workout-title">${d.focus}</div><div class="workout-sub">${d.name} · 40 minutos</div></div>
+      <div><div class="workout-title">${d.focus}</div><div class="workout-sub">${d.name} · ${plan==='laura'?'40':'60'} min</div></div>
     </div>
-    <div class="time-bar-wrap"><div class="time-bar">${tbSegs}</div></div>
-    <div class="exercise-list">${exRows}</div>
+    <div class="time-bar">${bars}</div>
+    <div class="ex-list">${buildExList(d.exs,plan)}</div>
   </div>`;
 }
 
-// ─── TODAY'S WORKOUT (INICIO) ───
+function renderDayPills(plan) {
+  const days = plan==='laura'?LAURA_DAYS:MANOLO_DAYS;
+  const active = plan==='laura'?lauraDay:manoloDay;
+  const color = plan==='laura'?'green':'blue';
+  document.getElementById(`${plan}-day-pills`).innerHTML = days.map((d,i)=>
+    `<div class="day-pill ${color}${i===active?' active':''}" onclick="selectDay('${plan}',${i})">${d.short}</div>`
+  ).join('');
+}
 
-function renderTodayWorkout() {
-  const dow = new Date().getDay(); // 0=Dom
-  const map = {1:0,2:1,3:2,4:3,5:4,6:5,0:6};
-  const idx = map[dow];
-  const d = DAYS[idx];
-  const wrap = document.getElementById('today-workout-card');
-  const sub = document.getElementById('today-workout-sub');
-  if (d.rest) {
-    sub.textContent = d.name + ' — día de descanso';
-    wrap.innerHTML = `<div class="rest-card" style="padding:16px 20px">
-      <div class="rest-emoji" style="font-size:28px;margin-bottom:6px">${d.name==='Sábado'?'🧘':'😴'}</div>
-      <div class="rest-title" style="font-size:16px">${d.name==='Sábado'?'Descanso activo':'Descanso completo'}</div>
-      <div class="rest-sub" style="font-size:12px">${d.name==='Sábado'?'Caminata o stretching suave':'Recuperación muscular'}</div>
-    </div>`; return;
-  }
-  sub.textContent = d.name + ' · ' + d.focus;
-  const exRows = d.exercises.slice(0,4).map(e=>`
-    <div class="ex-row">
-      <div class="ex-dot ${e.tag==='cardio'?'blue':e.tag==='liga'?'amber':'green'}"></div>
-      <span class="ex-name">${e.name}</span>
-      <span class="ex-meta">${e.sets}×${e.reps}</span>
-    </div>`).join('');
-  wrap.innerHTML = `<div class="workout-card">
+function selectDay(plan, i) {
+  if(plan==='laura') lauraDay=i; else manoloDay=i;
+  renderDayPills(plan);
+  renderWorkout(plan,i);
+}
+
+function renderTodayCard(plan) {
+  const days = plan==='laura'?LAURA_DAYS:MANOLO_DAYS;
+  const dowMap={1:0,2:1,3:2,4:3,5:4,6:5,0:6};
+  const idx=dowMap[new Date().getDay()];
+  const d=days[idx];
+  const color=plan==='laura'?'green':'blue';
+  document.getElementById(`${plan}-today-sub`).textContent=`${d.name} · ${d.focus||'Descanso'}`;
+  const wrap=document.getElementById(`${plan}-today-card`);
+  if(d.rest){wrap.innerHTML=`<div class="rest-card ${plan==='manolo'?'blue':''}"><div class="rest-emoji" style="font-size:28px">😴</div><div class="rest-title" style="font-size:16px">Descanso</div></div>`;return;}
+  const preview=d.exs.slice(0,3).map(e=>`<div class="ex-row" style="cursor:default"><div class="ex-dot ${color}"></div><span class="ex-name">${e.n}</span><span class="ex-meta">${e.s}×${e.r}</span></div>`).join('');
+  wrap.innerHTML=`<div class="workout-card">
     <div class="workout-header">
-      <div><div class="workout-title">${d.focus}</div><div class="workout-sub">40 min · ${d.exercises.length} ejercicios</div></div>
-      <button onclick="showScreen('rutina');selectDay(${idx})" style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer">Ver todo</button>
+      <div><div class="workout-title">${d.focus}</div><div class="workout-sub">${plan==='laura'?'40':'60'} min · ${d.exs.length} ejercicios</div></div>
+      <button onclick="showScreen('${plan}','rutina');selectDay('${plan}',${idx})" style="background:var(--${color});color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer">Ver todo</button>
     </div>
-    <div class="exercise-list">${exRows}</div>
-    <div style="font-size:12px;color:var(--text3);margin-top:8px;text-align:center">y ${d.exercises.length-4} ejercicios más…</div>
+    <div class="ex-list">${preview}</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:8px;text-align:center">y ${d.exs.length-3} ejercicios más…</div>
   </div>`;
 }
 
-// ─── COMBO ───
+function renderMealCard(m, plan, showProt=false) {
+  const color=plan==='laura'?'green':'blue';
+  return `<div class="meal-card">
+    <div class="meal-hdr ${color}"><span class="meal-hdr-title">${m.e} ${m.n}</span></div>
+    <div class="meal-body">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-style:italic">${m.s}</div>
+      <div class="meal-items">${m.i.map(x=>`<span>${x}</span>`).join('')}</div>
+    </div>
+    <div class="meal-footer">
+      <span class="mpill mp-kcal">${m.k}</span>
+      ${showProt&&m.p?`<span class="mpill mp-prot">${m.p} prot</span>`:''}
+      ${m.t?`<span style="font-size:10px;padding:3px 8px;border-radius:8px;background:#f1f1f1;color:#555">⏱ ${m.t}</span>`:''}
+    </div>
+  </div>`;
+}
 
-function calcCombo() {
-  const v1 = document.getElementById('combo-des').value;
-  const v2 = document.getElementById('combo-com').value;
-  ['alert-repeat','alert-cal','alert-prot','alert-ok'].forEach(id=>{
-    document.getElementById(id).classList.remove('show');
-    document.getElementById(id).textContent='';
+function renderShop(plan) {
+  const data=plan==='laura'?LAURA_SHOP:MANOLO_SHOP;
+  const color=plan==='laura'?'green':'blue';
+  const saved=JSON.parse(localStorage.getItem(`shop-${plan}`)||'{}');
+  document.getElementById(`${plan}-shop-list`).innerHTML=data.map(g=>`
+    <div class="shop-group">
+      <div class="shop-group-title ${color}">${g.t}</div>
+      <div class="shop-wrap">${g.i.map(item=>{
+        const key=g.t+item;
+        const checked=saved[key]||false;
+        return `<div class="shop-item ${color}-theme${checked?' checked':''}" onclick="toggleShop(this,'${plan}','${(g.t+item).replace(/'/g,"\\'")}')">
+          <div class="shop-cb">${checked?'✓':''}</div>
+          <span class="shop-name">${item}</span>
+        </div>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+
+function toggleShop(el,plan,key) {
+  const checked=!el.classList.contains('checked');
+  el.classList.toggle('checked',checked);
+  el.querySelector('.shop-cb').textContent=checked?'✓':'';
+  const saved=JSON.parse(localStorage.getItem(`shop-${plan}`)||'{}');
+  saved[key]=checked;
+  localStorage.setItem(`shop-${plan}`,JSON.stringify(saved));
+}
+
+// COMBO
+function calcCombo(plan) {
+  const isLaura=plan==='laura';
+  const kcalMeta=isLaura?1570:2100;
+  const protMeta=isLaura?110:140;
+  const des=document.getElementById(`${plan}-des`).value;
+  const com=document.getElementById(`${plan}-com`).value;
+  const cen=isLaura?null:document.getElementById('manolo-cen')?.value;
+  ['repeat','cal','prot','ok'].forEach(id=>{
+    const el=document.getElementById(`${plan}-alert-${id}`);
+    if(el){el.classList.remove('show');el.textContent='';}
   });
-  if (!v1||!v2) return;
-  const [k1,p1,pr1] = v1.split(',');
-  const [k2,p2,pr2] = v2.split(',');
-  const tk=+k1+ +k2, tp=+p1+ +p2;
-  const bar = document.getElementById('combo-result-bar');
+  if(!des||!com||(plan==='manolo'&&!cen)) return;
+  const parse=v=>v?v.split(',').map(Number):null;
+  const d=parse(des),c=parse(com),n=parse(cen);
+  const tk=d[0]+c[0]+(n?n[0]:0);
+  const tp=d[1]+c[1]+(n?n[1]:0);
+  const protsUsed=[d[2],c[2],n?n[2]:null].filter(Boolean);
+  const bar=document.getElementById(`${plan}-combo-bar`);
   bar.style.display='flex';
-  document.getElementById('cr-kcal').textContent=tk+' kcal';
-  document.getElementById('cr-prot').textContent=tp+'g';
+  document.getElementById(`${plan}-cr-kcal`).textContent=tk+' kcal';
+  document.getElementById(`${plan}-cr-prot`).textContent=tp+'g';
   let allOk=true;
   const pNames={huevo:'huevo',pollo:'pollo',carne:'carne roja',atun:'atún',salmon:'salmón'};
-  const sameP=(pr1===pr2)||(pr1==='atun'&&pr2==='salmon')||(pr1==='salmon'&&pr2==='atun');
-  if(sameP){allOk=false;const el=document.getElementById('alert-repeat');el.classList.add('show');el.textContent=`⚠️ Repites ${pNames[pr1]||pr1} en las dos comidas. Elige otra proteína diferente en la comida de la tarde.`;}
-  if(tk<1450){allOk=false;const el=document.getElementById('alert-cal');el.classList.add('show');el.textContent=`Calorías bajas (${tk} kcal) — agrega ½ aguacate, nuez o una tortilla extra.`;}
-  else if(tk>1680){allOk=false;const el=document.getElementById('alert-cal');el.classList.add('show');el.textContent=`Calorías altas (${tk} kcal) — reduce ½ porción de carbohidrato en una comida.`;}
-  if(tp<90){allOk=false;const el=document.getElementById('alert-prot');el.classList.add('show');el.textContent=`Proteína baja (${tp}g) — agrega un huevo duro o cucharada de atún extra.`;}
-  if(allOk){document.getElementById('cr-status').textContent='✓';const el=document.getElementById('alert-ok');el.classList.add('show');el.textContent=`✓ Día perfecto — ${tk} kcal y ${tp}g de proteína. Ideal para quemar grasa y ganar músculo.`;}
-  else{document.getElementById('cr-status').textContent='⚠';}
+  const seen={};let repeated=null;
+  protsUsed.forEach(p=>{if(seen[p]||((p==='atun'||p==='salmon')&&seen['atun']||seen['salmon'])){repeated=p;}seen[p]=true;});
+  if(repeated){allOk=false;const el=document.getElementById(`${plan}-alert-repeat`);el.classList.add('show');el.textContent=`⚠️ Repites ${pNames[repeated]||repeated} en varias comidas. Varía las proteínas del día.`;}
+  if(tk<kcalMeta-120){allOk=false;const el=document.getElementById(`${plan}-alert-cal`);el.classList.add('show');el.textContent=`Calorías bajas (${tk} kcal) — agrega algo más al día.`;}
+  else if(tk>kcalMeta+200){allOk=false;const el=document.getElementById(`${plan}-alert-cal`);el.classList.add('show');el.textContent=`Calorías altas (${tk} kcal) — reduce una porción de carbohidrato.`;}
+  if(tp<protMeta-15){allOk=false;const el=document.getElementById(`${plan}-alert-prot`);el.classList.add('show');el.textContent=`Proteína baja (${tp}g) — agrega un huevo duro o más proteína.`;}
+  if(allOk){document.getElementById(`${plan}-cr-status`).textContent='✓';const el=document.getElementById(`${plan}-alert-ok`);el.classList.add('show');el.textContent=`✓ Día perfecto — ${tk} kcal y ${tp}g de proteína. ¡Va muy bien!`;}
+  else{document.getElementById(`${plan}-cr-status`).textContent='⚠';}
 }
 
-// ─── NAVIGATION ───
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-  const map={inicio:0,rutina:1,menu:2,combo:3,compras:4};
-  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
-  document.querySelector('.main').scrollTo(0,0);
-}
-
-// ─── GREETING ───
-
-function setGreeting() {
-  const h=new Date().getHours();
-  const days=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  document.getElementById('dayName').textContent=days[new Date().getDay()];
-  document.getElementById('greeting').textContent=h<12?'Buenos días 👋':h<19?'Buenas tardes 👋':'Buenas noches 👋';
-}
-
-
-// SPLASH
-function enterApp() {
-  const splash = document.getElementById('splash');
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function openPlan(plan) {
+  const splash=document.getElementById('home-splash');
   splash.classList.add('hide');
-  setTimeout(() => { splash.style.display = 'none'; }, 650);
+  setTimeout(()=>{splash.style.display='none';},500);
+  document.getElementById(`app-${plan}`).classList.add('active');
+  initPlan(plan);
 }
 
-// ─── INIT ───
+function goHome() {
+  document.querySelectorAll('.app-wrapper').forEach(a=>a.classList.remove('active'));
+  const splash=document.getElementById('home-splash');
+  splash.style.display='flex';
+  splash.classList.remove('hide');
+}
 
-setGreeting();
-renderDayPills();
-renderWorkout();
-renderTodayWorkout();
-renderMenu();
-renderShop();
+function initPlan(plan) {
+  const h=new Date().getHours();
+  const greet=h<12?'Buenos días 👋':h<19?'Buenas tardes 👋':'Buenas noches 👋';
+  document.getElementById(`${plan}-greeting`).textContent=greet;
+  const dowMap={1:0,2:1,3:2,4:3,5:4,6:5,0:6};
+  const idx=dowMap[new Date().getDay()];
+  if(plan==='laura'){lauraDay=idx;}else{manoloDay=idx;}
+  renderDayPills(plan);
+  renderWorkout(plan,idx);
+  renderTodayCard(plan);
+  if(plan==='laura'){
+    document.getElementById('laura-avenas').innerHTML=LAURA_AVENAS.map(m=>renderMealCard(m,'laura')).join('');
+    document.getElementById('laura-proteinas').innerHTML=LAURA_PROTEINAS.map(m=>renderMealCard(m,'laura',true)).join('');
+    document.getElementById('laura-comidas').innerHTML=LAURA_COMIDAS.map(m=>renderMealCard(m,'laura',true)).join('');
+  }
+  renderShop(plan);
+}
 
-// Set default active day to today
-const dowMap={1:0,2:1,3:2,4:3,5:4,6:5,0:6};
-activeDay=dowMap[new Date().getDay()];
-renderDayPills();
-renderWorkout();
+function showScreen(plan, id) {
+  const screens=document.querySelectorAll(`#app-${plan} .screen`);
+  screens.forEach(s=>s.classList.remove('active'));
+  document.getElementById(`${plan}-screen-${id}`).classList.add('active');
+  const btns=document.querySelectorAll(`#${plan}-nav .nav-btn`);
+  btns.forEach(b=>b.classList.remove('active'));
+  const map={inicio:0,rutina:1,menu:2,alimentacion:2,combo:3,compras:4};
+  if(map[id]!==undefined) btns[map[id]].classList.add('active');
+  document.getElementById(`${plan}-main`).scrollTo(0,0);
+}
 </script>
 </body>
 </html>
