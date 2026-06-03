@@ -300,8 +300,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   <nav class="nav green" id="laura-nav">
     <button class="nav-btn active" onclick="showScreen('laura','inicio')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
     <button class="nav-btn" onclick="showScreen('laura','rutina')"><span class="nav-icon">💪</span><span class="nav-label">Rutina</span></button>
+    <button class="nav-btn" onclick="showScreen('laura','progreso')"><span class="nav-icon">📊</span><span class="nav-label">Progreso</span></button>
     <button class="nav-btn" onclick="showScreen('laura','menu')"><span class="nav-icon">🍽</span><span class="nav-label">Menú</span></button>
-    <button class="nav-btn" onclick="showScreen('laura','combo')"><span class="nav-icon">🎯</span><span class="nav-label">Combo</span></button>
     <button class="nav-btn" onclick="showScreen('laura','compras')"><span class="nav-icon">🛒</span><span class="nav-label">Compras</span></button>
   </nav>
   <main class="main" id="laura-main">
@@ -393,6 +393,87 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
         <div id="laura-alert-ok" class="alert alert-ok"></div>
       </div>
     </div>
+
+    <div id="laura-screen-progreso" class="screen">
+      <div class="section-title">Mi Progreso</div>
+      <div class="section-sub">Registra tus medidas cada 4 semanas y ve tu evolución</div>
+
+      <!-- CALCULADORA -->
+      <div style="background:linear-gradient(135deg,var(--green-deep),#0d5c45);border-radius:var(--radius);padding:18px;margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">🧮 Calculadora de composición corporal</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:14px;">Calcula tu % de grasa y músculo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;color:var(--green-mid);margin-bottom:4px;">Cintura (cm)</div>
+            <input id="laura-calc-cintura" type="number" placeholder="ej. 88" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('laura')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--green-mid);margin-bottom:4px;">Cadera (cm)</div>
+            <input id="laura-calc-cadera" type="number" placeholder="ej. 96" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('laura')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--green-mid);margin-bottom:4px;">Cuello (cm)</div>
+            <input id="laura-calc-cuello" type="number" placeholder="ej. 33" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('laura')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--green-mid);margin-bottom:4px;">Peso (kg)</div>
+            <input id="laura-calc-peso" type="number" placeholder="ej. 56" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('laura')">
+          </div>
+        </div>
+        <div id="laura-calc-result" style="display:none;background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--green-mid);margin-bottom:2px;">% GRASA</div>
+              <div id="laura-res-grasa" style="font-size:28px;font-weight:700;color:#fff;"></div>
+              <div id="laura-res-grasa-kg" style="font-size:11px;color:rgba(255,255,255,0.6);"></div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--green-mid);margin-bottom:2px;">MASA MAGRA</div>
+              <div id="laura-res-magra" style="font-size:28px;font-weight:700;color:#fff;"></div>
+              <div id="laura-res-magra-kg" style="font-size:11px;color:rgba(255,255,255,0.6);"></div>
+            </div>
+          </div>
+          <div id="laura-res-status" style="margin-top:10px;font-size:12px;text-align:center;padding:6px;border-radius:8px;"></div>
+        </div>
+        <button type="button" onclick="saveCalcToProgress('laura')" style="width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">💾 Guardar como nueva medición</button>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="section-title" style="margin-bottom:0">Historial de medidas</div>
+        <button type="button" onclick="showAddMeasure('laura')" style="background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:38px;">+ Agregar</button>
+      </div>
+
+      <!-- FORM AGREGAR -->
+      <div id="laura-add-form" style="display:none;background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:24px;box-shadow:var(--shadow);border:1px solid var(--border);padding-bottom:20px;">
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;">Nueva medición</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Peso (kg)</div>
+            <input id="laura-inp-peso" type="number" step="0.1" placeholder="56.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cintura (cm)</div>
+            <input id="laura-inp-cintura" type="number" step="0.1" placeholder="88.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cadera (cm)</div>
+            <input id="laura-inp-cadera" type="number" step="0.1" placeholder="96.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cuello (cm)</div>
+            <input id="laura-inp-cuello" type="number" step="0.1" placeholder="33.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;">
+          <button type="button" onclick="saveMeasure('laura')" style="flex:1;padding:14px 10px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">💾 Guardar medición</button>
+          <button type="button" onclick="document.getElementById('laura-add-form').style.display='none'" style="padding:14px 16px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">✕</button>
+        </div>
+      </div>
+
+      <div id="laura-measures-list"></div>
+    </div>
+
     <div id="laura-screen-compras" class="screen">
       <div class="section-title">Lista de compras</div>
       <div class="section-sub">Marca lo que ya tienes en casa</div>
@@ -414,8 +495,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   <nav class="nav blue" id="manolo-nav">
     <button class="nav-btn active" onclick="showScreen('manolo','inicio')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
     <button class="nav-btn" onclick="showScreen('manolo','rutina')"><span class="nav-icon">💪</span><span class="nav-label">Rutina</span></button>
+    <button class="nav-btn" onclick="showScreen('manolo','progreso')"><span class="nav-icon">📊</span><span class="nav-label">Progreso</span></button>
     <button class="nav-btn" onclick="showScreen('manolo','alimentacion')"><span class="nav-icon">🍽</span><span class="nav-label">Comidas</span></button>
-    <button class="nav-btn" onclick="showScreen('manolo','combo')"><span class="nav-icon">🎯</span><span class="nav-label">Combo</span></button>
     <button class="nav-btn" onclick="showScreen('manolo','compras')"><span class="nav-icon">🛒</span><span class="nav-label">Compras</span></button>
   </nav>
   <main class="main" id="manolo-main">
@@ -582,6 +663,87 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
         <div id="manolo-alert-ok" class="alert" style="background:var(--blue-light);color:var(--blue-dark);border:1px solid #bcd4f8;"></div>
       </div>
     </div>
+
+    <div id="manolo-screen-progreso" class="screen">
+      <div class="section-title">Mi Progreso</div>
+      <div class="section-sub">Registra tus medidas cada 4 semanas y ve tu evolución</div>
+
+      <!-- CALCULADORA -->
+      <div style="background:linear-gradient(135deg,var(--blue-deep),#1e3a8a);border-radius:var(--radius);padding:18px;margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--blue-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">🧮 Calculadora de composición corporal</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:14px;">Calcula tu % de grasa y músculo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;color:var(--blue-mid);margin-bottom:4px;">Cintura (cm)</div>
+            <input id="manolo-calc-cintura" type="number" placeholder="ej. 100" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('manolo')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--blue-mid);margin-bottom:4px;">Abdomen (cm)</div>
+            <input id="manolo-calc-abdomen" type="number" placeholder="ej. 100" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('manolo')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--blue-mid);margin-bottom:4px;">Cuello (cm)</div>
+            <input id="manolo-calc-cuello" type="number" placeholder="ej. 42" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('manolo')">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--blue-mid);margin-bottom:4px;">Peso (kg)</div>
+            <input id="manolo-calc-peso" type="number" placeholder="ej. 78" style="width:100%;padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;" oninput="calcBodyComp('manolo')">
+          </div>
+        </div>
+        <div id="manolo-calc-result" style="display:none;background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--blue-mid);margin-bottom:2px;">% GRASA</div>
+              <div id="manolo-res-grasa" style="font-size:28px;font-weight:700;color:#fff;"></div>
+              <div id="manolo-res-grasa-kg" style="font-size:11px;color:rgba(255,255,255,0.6);"></div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--blue-mid);margin-bottom:2px;">MASA MAGRA</div>
+              <div id="manolo-res-magra" style="font-size:28px;font-weight:700;color:#fff;"></div>
+              <div id="manolo-res-magra-kg" style="font-size:11px;color:rgba(255,255,255,0.6);"></div>
+            </div>
+          </div>
+          <div id="manolo-res-status" style="margin-top:10px;font-size:12px;text-align:center;padding:6px;border-radius:8px;"></div>
+        </div>
+        <button type="button" onclick="saveCalcToProgress('manolo')" style="width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">💾 Guardar como nueva medición</button>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="section-title" style="margin-bottom:0">Historial de medidas</div>
+        <button type="button" onclick="showAddMeasure('manolo')" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:38px;">+ Agregar</button>
+      </div>
+
+      <!-- FORM AGREGAR -->
+      <div id="manolo-add-form" style="display:none;background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:24px;box-shadow:var(--shadow);border:1px solid var(--border);padding-bottom:20px;">
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;">Nueva medición</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Peso (kg)</div>
+            <input id="manolo-inp-peso" type="number" step="0.1" placeholder="78.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cintura (cm)</div>
+            <input id="manolo-inp-cintura" type="number" step="0.1" placeholder="100.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cadera (cm)</div>
+            <input id="manolo-inp-cadera" type="number" step="0.1" placeholder="102.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500;">Cuello (cm)</div>
+            <input id="manolo-inp-cuello" type="number" step="0.1" placeholder="42.0" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;">
+          <button type="button" onclick="saveMeasure('manolo')" style="flex:1;padding:14px 10px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">💾 Guardar medición</button>
+          <button type="button" onclick="document.getElementById('manolo-add-form').style.display='none'" style="padding:14px 16px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;min-height:50px;">✕</button>
+        </div>
+      </div>
+
+      <div id="manolo-measures-list"></div>
+    </div>
+
     <div id="manolo-screen-compras" class="screen">
       <div class="section-title">Lista de compras</div>
       <div class="section-sub">Marca lo que ya tienes</div>
@@ -945,6 +1107,233 @@ function calcCombo(plan) {
   else{document.getElementById(`${plan}-cr-status`).textContent='⚠';}
 }
 
+
+// ═══════════════════════════════════════
+// BODY COMPOSITION CALCULATOR
+// ═══════════════════════════════════════
+function calcBodyComp(plan) {
+  const isLaura = plan === 'laura';
+  const talla = isLaura ? 161 : 165;
+  const sexo = isLaura ? 'mujer' : 'hombre';
+
+  const cintura = parseFloat(document.getElementById(`${plan}-calc-cintura`).value);
+  const cuello = parseFloat(document.getElementById(`${plan}-calc-cuello`).value);
+  const peso = parseFloat(document.getElementById(`${plan}-calc-peso`).value);
+  const cadera = isLaura ? parseFloat(document.getElementById(`${plan}-calc-cadera`).value) : null;
+  const abdomen = !isLaura ? parseFloat(document.getElementById(`${plan}-calc-abdomen`).value) : null;
+
+  const result = document.getElementById(`${plan}-calc-result`);
+
+  if (isLaura) {
+    if (!cintura || !cuello || !peso || !cadera) return;
+    const logVal = Math.log10(cintura + cadera - cuello);
+    const logTalla = Math.log10(talla);
+    const grasa = 495 / (1.29579 - 0.35004 * logVal + 0.22100 * logTalla) - 450;
+    showCalcResult(plan, grasa, peso, result);
+  } else {
+    if (!cintura || !cuello || !peso || !abdomen) return;
+    const logVal = Math.log10(abdomen - cuello);
+    const logTalla = Math.log10(talla);
+    const grasa = 495 / (1.0324 - 0.19077 * logVal + 0.15456 * logTalla) - 450;
+    showCalcResult(plan, grasa, peso, result);
+  }
+}
+
+function showCalcResult(plan, grasa, peso, resultEl) {
+  const isLaura = plan === 'laura';
+  const grasaRound = Math.round(grasa * 10) / 10;
+  const grasaKg = Math.round(peso * grasa / 100 * 10) / 10;
+  const magraKg = Math.round((peso - grasaKg) * 10) / 10;
+  const magraPct = Math.round((magraKg / peso) * 100 * 10) / 10;
+
+  document.getElementById(`${plan}-res-grasa`).textContent = grasaRound + '%';
+  document.getElementById(`${plan}-res-grasa-kg`).textContent = grasaKg + ' kg de grasa';
+  document.getElementById(`${plan}-res-magra`).textContent = magraKg + ' kg';
+  document.getElementById(`${plan}-res-magra-kg`).textContent = magraPct + '% masa magra';
+
+  const statusEl = document.getElementById(`${plan}-res-status`);
+  let statusText = '', statusColor = '';
+
+  if (isLaura) {
+    if (grasa < 25) { statusText = '✓ Excelente — zona atlética'; statusColor = '#065F46'; statusEl.style.background = '#D1FAE5'; }
+    else if (grasa < 32) { statusText = '✓ Bien — zona saludable'; statusColor = '#065F46'; statusEl.style.background = '#D1FAE5'; }
+    else if (grasa < 38) { statusText = '⚠ Atención — sobrepeso graso'; statusColor = '#92400E'; statusEl.style.background = '#FEF3C7'; }
+    else { statusText = '🔴 Alto — obesidad grasa'; statusColor = '#7F1D1D'; statusEl.style.background = '#FEE2E2'; }
+  } else {
+    if (grasa < 18) { statusText = '✓ Excelente — zona atlética'; statusColor = '#1e40af'; statusEl.style.background = '#DBEAFE'; }
+    else if (grasa < 25) { statusText = '✓ Bien — zona saludable'; statusColor = '#1e40af'; statusEl.style.background = '#DBEAFE'; }
+    else if (grasa < 30) { statusText = '⚠ Atención — sobrepeso graso'; statusColor = '#92400E'; statusEl.style.background = '#FEF3C7'; }
+    else { statusText = '🔴 Alto — obesidad grasa'; statusColor = '#7F1D1D'; statusEl.style.background = '#FEE2E2'; }
+  }
+
+  statusEl.textContent = statusText;
+  statusEl.style.color = statusColor;
+  resultEl.style.display = 'block';
+}
+
+function saveCalcToProgress(plan) {
+  const cintura = document.getElementById(`${plan}-calc-cintura`).value;
+  const cuello = document.getElementById(`${plan}-calc-cuello`).value;
+  const peso = document.getElementById(`${plan}-calc-peso`).value;
+  const cadera = plan === 'laura' ? document.getElementById(`${plan}-calc-cadera`).value : '';
+  if (!cintura || !cuello || !peso) { alert('Completa todos los campos primero'); return; }
+  document.getElementById(`${plan}-inp-peso`).value = peso;
+  document.getElementById(`${plan}-inp-cintura`).value = cintura;
+  document.getElementById(`${plan}-inp-cuello`).value = cuello;
+  if (plan === 'laura' && cadera) document.getElementById(`${plan}-inp-cadera`).value = cadera;
+  saveMeasure(plan);
+}
+
+// ═══════════════════════════════════════
+// PROGRESS TRACKING
+// ═══════════════════════════════════════
+function showAddMeasure(plan) {
+  const form = document.getElementById(`${plan}-add-form`);
+  const isVisible = form.style.display !== 'none';
+  form.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    setTimeout(() => {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+}
+
+function saveMeasure(plan) {
+  const peso = document.getElementById(`${plan}-inp-peso`).value;
+  const cintura = document.getElementById(`${plan}-inp-cintura`).value;
+  const cadera = document.getElementById(`${plan}-inp-cadera`)?.value || '';
+  const cuello = document.getElementById(`${plan}-inp-cuello`).value;
+
+  if (!peso || !cintura) { alert('Ingresa al menos peso y cintura'); return; }
+
+  const measures = JSON.parse(localStorage.getItem(`measures-${plan}`) || '[]');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('es-MX', {day:'2-digit', month:'short', year:'numeric'});
+  const weekNum = measures.length + 1;
+
+  measures.push({ date: dateStr, week: weekNum, peso: parseFloat(peso), cintura: parseFloat(cintura), cadera: cadera ? parseFloat(cadera) : null, cuello: cuello ? parseFloat(cuello) : null });
+  localStorage.setItem(`measures-${plan}`, JSON.stringify(measures));
+
+  // Clear form
+  ['peso','cintura','cadera','cuello'].forEach(f => {
+    const el = document.getElementById(`${plan}-inp-${f}`);
+    if (el) el.value = '';
+  });
+  document.getElementById(`${plan}-add-form`).style.display = 'none';
+  renderMeasures(plan);
+}
+
+function deleteMeasure(plan, idx) {
+  const measures = JSON.parse(localStorage.getItem(`measures-${plan}`) || '[]');
+  measures.splice(idx, 1);
+  localStorage.setItem(`measures-${plan}`, JSON.stringify(measures));
+  renderMeasures(plan);
+}
+
+function renderMeasures(plan) {
+  const measures = JSON.parse(localStorage.getItem(`measures-${plan}`) || '[]');
+  const wrap = document.getElementById(`${plan}-measures-list`);
+  const isLaura = plan === 'laura';
+  const color = isLaura ? 'var(--green)' : 'var(--blue)';
+  const colorLight = isLaura ? 'var(--green-light)' : 'var(--blue-light)';
+  const colorDark = isLaura ? 'var(--green-dark)' : 'var(--blue-dark)';
+
+  if (measures.length === 0) {
+    wrap.innerHTML = `<div style="text-align:center;padding:32px 20px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);">
+      <div style="font-size:36px;margin-bottom:8px;">📏</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;">Sin mediciones aún</div>
+      <div style="font-size:13px;color:var(--text3);">Agrega tu primera medición para empezar a ver tu progreso</div>
+    </div>`; return;
+  }
+
+  // Initial values
+  const initiales = isLaura
+    ? { peso: 56, cintura: 88, cadera: 96 }
+    : { peso: 78, cintura: 100, cadera: 102 };
+
+  const first = measures[0];
+  const last = measures[measures.length - 1];
+
+  // Summary card
+  let summaryHTML = `<div style="background:${colorLight};border-radius:var(--radius);padding:14px;margin-bottom:14px;border:1px solid ${color}20;">
+    <div style="font-size:12px;font-weight:700;color:${colorDark};margin-bottom:10px;text-transform:uppercase;letter-spacing:0.04em;">📈 Resumen de progreso</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">`;
+
+  const campos = [
+    { key: 'peso', label: 'Peso', unit: 'kg', meta: isLaura ? 56 : 70, lowerBetter: true },
+    { key: 'cintura', label: 'Cintura', unit: 'cm', meta: isLaura ? 77 : 90, lowerBetter: true },
+    { key: 'cadera', label: 'Cadera', unit: 'cm', meta: isLaura ? 93 : 95, lowerBetter: true },
+  ];
+
+  campos.forEach(c => {
+    const init = initiales[c.key];
+    const curr = last[c.key];
+    if (!curr) return;
+    const diff = curr - init;
+    const diffStr = (diff > 0 ? '+' : '') + diff.toFixed(1);
+    const isGood = c.lowerBetter ? diff <= 0 : diff >= 0;
+    summaryHTML += `<div style="background:white;border-radius:8px;padding:8px;text-align:center;">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">${c.label}</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);">${curr}</div>
+      <div style="font-size:10px;color:${isGood?'#065F46':'#7F1D1D'};font-weight:600;">${diffStr} ${c.unit}</div>
+    </div>`;
+  });
+
+  summaryHTML += '</div></div>';
+  wrap.innerHTML = summaryHTML;
+
+  // Individual measurements
+  const reversedMeasures = [...measures].reverse();
+  reversedMeasures.forEach((m, ri) => {
+    const i = measures.length - 1 - ri;
+    const isFirst = i === 0;
+    const prev = i > 0 ? measures[i-1] : initiales;
+    const pesoChange = prev.peso ? (m.peso - prev.peso).toFixed(1) : null;
+    const cinturaChange = prev.cintura ? (m.cintura - prev.cintura).toFixed(1) : null;
+
+    wrap.innerHTML += `<div style="background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:${color};">Semana ${m.week * 4 - 3}–${m.week * 4}</div>
+          <div style="font-size:12px;color:var(--text3);">${m.date}</div>
+        </div>
+        <button onclick="deleteMeasure('${plan}',${i})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px;">🗑</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">Peso</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);">${m.peso}</div>
+          <div style="font-size:9px;color:${pesoChange<=0?'#065F46':'#7F1D1D'};font-weight:600;">${pesoChange!==null?(pesoChange>0?'+':'')+pesoChange+' kg':'inicio'}</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">Cintura</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);">${m.cintura}</div>
+          <div style="font-size:9px;color:${cinturaChange<=0?'#065F46':'#7F1D1D'};font-weight:600;">${cinturaChange!==null?(cinturaChange>0?'+':'')+cinturaChange+' cm':'inicio'}</div>
+        </div>
+        ${m.cadera ? `<div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">Cadera</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);">${m.cadera}</div>
+          <div style="font-size:9px;color:var(--text3);">cm</div>
+        </div>` : ''}
+        ${m.cuello ? `<div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">Cuello</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);">${m.cuello}</div>
+          <div style="font-size:9px;color:var(--text3);">cm</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  });
+}
+
+// Update showScreen to handle progreso
+const _origShowScreen = showScreen;
+showScreen = function(plan, id) {
+  _origShowScreen(plan, id);
+  if (id === 'progreso') {
+    renderMeasures(plan);
+  }
+};
+
 // ═══════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════
@@ -987,8 +1376,8 @@ function showScreen(plan, id) {
   document.getElementById(`${plan}-screen-${id}`).classList.add('active');
   const btns=document.querySelectorAll(`#${plan}-nav .nav-btn`);
   btns.forEach(b=>b.classList.remove('active'));
-  const map={inicio:0,rutina:1,menu:2,alimentacion:2,combo:3,compras:4};
-  if(map[id]!==undefined) btns[map[id]].classList.add('active');
+  const map={inicio:0,rutina:1,progreso:2,menu:3,alimentacion:3,combo:4,compras:5};
+  if(map[id]!==undefined && btns[map[id]]) btns[map[id]].classList.add('active');
   document.getElementById(`${plan}-main`).scrollTo(0,0);
 }
 </script>
